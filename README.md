@@ -6,14 +6,13 @@ The game board have width of 15 inches and height of 15 inches. The 4 basic road
 
 # Additional Details
 
-![](detail\61d28jg3xHL._AC_SX679_.jpg)
+![](detail/61d28jg3xHL._AC_SX679_.jpg)
 
-![](detail\61VzyiBmBKL._AC_SX679_.jpg)
+![](detail/61VzyiBmBKL._AC_SX679_.jpg)
 
-![](detail\71FpuhxmUKL._AC_SX679_.jpg)
+![](detail/71FpuhxmUKL._AC_SX679_.jpg)
 
-![](detail\71hg9Q0p+wL._AC_SX679_.jpg)
+![](detail/71hg9Q0p+wL._AC_SX679_.jpg)
 
-![](detail\71VioVCsvmL._AC_SX679_.jpg)
+![](detail/71VioVCsvmL._AC_SX679_.jpg)
 
-![](https://github.com/hooooolyshit/LogicRoadBuildGame/blob/master/detail/61VzyiBmBKL._AC_SX679_.jpg)
