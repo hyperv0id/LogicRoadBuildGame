@@ -22,7 +22,7 @@ public class Main extends GameApplication {
     public static void main(String[] args) {
         launch(args);
     }
-
+    // 随便改的一点代码
     @Override
     protected void initSettings(GameSettings gameSettings) {
         /**
