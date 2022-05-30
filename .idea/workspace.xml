@@ -4,59 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d2fabd3c-334a-4a79-8991-fd6adc91ab9b" name="Changes" comment="Changes">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/AccessoryFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/GameType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/app/BottomCtrl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/app/CarCtrl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/app/GameLevelCtrl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/app/VarManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/components/CarRunner.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/components/MousePressLosePoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/components/MyCloseToPlacePoints.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/components/MyDraggable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/components/ReplaceAfterRelease.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/components/RightClickRotate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/components/RotateCenter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/info/BroadData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/info/LevelInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/data/levelInfo.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/music/Never Give Up - StayLoose [Arknights Soundtrack] Music Video (320 kbps).mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/sounds/boom.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/sounds/boom.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/text/text.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/Bottom.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/Bottom.psd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/Cross.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/Cross.psd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/CurveSquare.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/CurveSquare.psd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/Ending-2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/Ending.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/SmallBall.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/Star.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/Start.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/arc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/box.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/car.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/cross2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/ending_point.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/hyperbola.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/small_ball.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/accessory/starting_point.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/ui/css/mystyle.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/ui/cursor/cursor-default-1b9cfc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/ui/cursor/cursor-default.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/ui/cursor/cursor-pointer.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/ui/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/ui/reset.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/textures/ui/start.png" afterDir="false" />
+    <list default="true" id="d2fabd3c-334a-4a79-8991-fd6adc91ab9b" name="Changes" comment="添加Main类的doc">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +39,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/梁仲乐/Desktop/学习/软件开发/2021-2022 Spring/GameCopy0527/src/main/resources/assets/textures/accessory&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Users/23859/Desktop/cw/GameCopy0527&quot;,
     &quot;project.structure.last.edited&quot;: &quot;库&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
@@ -119,11 +69,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="应用程序.Main" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -142,6 +87,8 @@
       <workItem from="1653726357157" duration="1620000" />
       <workItem from="1653729874329" duration="8280000" />
       <workItem from="1653743444396" duration="23103000" />
+      <workItem from="1653896154878" duration="1520000" />
+      <workItem from="1653898095040" duration="954000" />
     </task>
     <servers />
   </component>
@@ -158,5 +105,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="添加Main类的doc" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加Main类的doc" />
   </component>
 </project>

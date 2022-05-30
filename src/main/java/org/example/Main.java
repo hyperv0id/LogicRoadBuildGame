@@ -14,6 +14,10 @@ import org.example.app.GameLevelCtrl;
 import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+
+/**
+ * Main类，继承自 GameApplication
+ */
 public class Main extends GameApplication {
     public static void main(String[] args) {
         launch(args);
