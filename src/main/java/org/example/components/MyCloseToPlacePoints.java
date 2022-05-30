@@ -6,9 +6,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.example.GameType;
-import org.example.app.GameLevelCtrl;
+import org.example.app.BottomCtrl;
 import org.example.app.VarManager;
-import org.example.info.BroadData;
 
 public class MyCloseToPlacePoints extends Component {
     Point2D offset = new Point2D(0,0);
@@ -23,10 +22,10 @@ public class MyCloseToPlacePoints extends Component {
             boolean isCloseTo = false;
             Point2D mousePlace = FXGL.getInput().getMousePositionWorld();
 
-            BroadData[][] data = GameLevelCtrl.broadDatas;
-            for (int i = 0; i< data.length; i++) {
-                for (int j = 0; j< data[0].length; j++){
-                    Point2D p2d = data[i][j].getPlace();
+
+            for (int i = 0; i< BottomCtrl.getRows(); i++) {
+                for (int j = 0; j< BottomCtrl.getCols(); j++){
+                    Point2D p2d = BottomCtrl.getPlacePoint(i,j);
 
                     if (p2d.distance(mousePlace) < maxDistance){
                         entity.setPosition(
@@ -42,9 +41,9 @@ public class MyCloseToPlacePoints extends Component {
                         entity.setProperty("row", i);
                         entity.setProperty("col", j);
                         int row=entity.getInt("row"),col=entity.getInt("col");
-                        GameLevelCtrl.broadDatas[row][col].setRotation(entity.getRotation());
-                        GameLevelCtrl.broadDatas[row][col].setEntityType((GameType) entity.getType());
-                        GameLevelCtrl.broadDatas[row][col].setRotation(entity.getRotation());
+                        BottomCtrl.setRotation(row, col, entity.getRotation());
+                        BottomCtrl.setType(row, col, (GameType) entity.getType());
+                        BottomCtrl.setRotation(row, col, entity.getRotation());
                     }
                     if (isCloseTo){
                         break;

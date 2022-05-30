@@ -3,20 +3,22 @@ package org.example;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
-import javafx.geometry.Point2D;
+
+import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.example.app.GameLevelCtrl;
 
-import java.util.ArrayList;
+
 import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
-
 public class Main extends GameApplication {
     public static void main(String[] args) {
         launch(args);
     }
+
     @Override
     protected void initSettings(GameSettings gameSettings) {
         /**
@@ -71,6 +73,18 @@ public class Main extends GameApplication {
 //       FXGL.addUINode(crossText, 700,700);
 //       FXGL.addUINode(hyperbolaText, 700,720);
 //       FXGL.addUINode(arcText, 700,740);
+    }
+
+    @Override
+
+    protected void initPhysics() {
+        FXGL.getPhysicsWorld().addCollisionHandler(
+                new CollisionHandler(GameType.Car,GameType.Star) {
+            @Override
+            protected void onCollisionBegin(Entity car, Entity star) {
+                star.removeFromWorld();
+            }
+        });
     }
 
     @Override

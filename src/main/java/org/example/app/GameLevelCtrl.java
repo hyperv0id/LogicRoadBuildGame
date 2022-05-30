@@ -3,26 +3,31 @@ package org.example.app;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.time.LocalTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import org.example.GameType;
 import org.example.components.MousePressLosePoint;
-import org.example.info.BroadData;
 import org.example.info.LevelInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 
 public class GameLevelCtrl {
-    public static LevelInfo info;
-    public static BroadData[][] broadDatas;
-    public static Entity bottomAccessory;
     // 所有积木，包括开始结束，方圆弯道
-    public static ArrayList<Entity> accessories = new ArrayList<>();
+    private static ArrayList<Entity> accessories = new ArrayList<>();
+
+    public static LevelInfo getInfo() {
+        return info;
+    }
+
+    public static Entity obstacle;
+    private static LevelInfo info;
 
     public GameLevelCtrl(LevelInfo info) {
         this.info = info;
@@ -32,38 +37,22 @@ public class GameLevelCtrl {
         FXGL.set("crossNum",info.crossNum());
         FXGL.set("hyperbolaNum",info.curveSquareNum());
         FXGL.set("arcNum",info.curveOrbitNum());
-        broadDatas = new BroadData[info.bottomRows()][info.bottomCols()];
-        for (int i = 0; i < broadDatas.length; i++) {
-            for (int j = 0; j < broadDatas[0].length; j++) {
-                broadDatas[i][j] = new BroadData();
-            }
-        }
+        FXGL.set("starNum",info.starNum());
+        FXGL.set("obstacleNum",info.obstacleNum());
     }
 
     public void init(){
-        initBottom();
-        generatePlacePoints();
+        BottomCtrl.init(info.bottomRows(), info.bottomCols());
         initStart();
         initEnd();
         initAccessories();
         // 初始化按钮
         initButton();
+        initObstacle();
+        initStar();
     }
 
-    private void initButton() {
-
-        Entity e = getGameWorld().create("StartRunCar",new SpawnData());
-        e.setPosition(610,50);
-        e.getViewComponent().addOnClickHandler(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                CarCtrl.startRunCar();
-            }
-        });
-        getGameWorld().addEntity(e);
-    }
-
-
+    // 基本可放置方块
     public void initAccessories() {
         double w=FXGL.getAppWidth(),h=FXGL.getAppHeight();
         // 创建多个十字形组件
@@ -93,58 +82,100 @@ public class GameLevelCtrl {
         }
     }
 
-    private void initEnd() {
-        // 创建终点
-        Entity endAccessory = getGameWorld().create("EndAccessory",new SpawnData());
-        // 设置终点位置
-        BroadData endData = broadDatas[info.endX()][info.endY()];
-        endAccessory.setPosition( endData.getPlace().subtract(endAccessory.getWidth()/2,endAccessory.getHeight()/2) );
-        endData.setEntityType((GameType) endAccessory.getType());
-        FXGL.getGameWorld().addEntity(endAccessory);
+    //随机在棋盘内产生一个障碍物
+    int[] obstaclePos = new int[2];
+    private void initObstacle() {
+
+        Random randomx = new Random();
+        Random randomy = new Random();
+        int boardx[]={70,207,343,480};
+        int boardy[]={70,207,343,480};
+
+        int j = 0;
+        int randIntX = randomx.nextInt(4);
+        int randIntY = randomy.nextInt(4);
+        for (int i = 0; i < info.obstacleNum(); i++) {
+            obstacle = getGameWorld().create("Obstacle", new SpawnData());
+            if (!((randIntX == 0 && randIntY == 0)||(randIntX == 3 && randIntY == 3))) {
+                obstacle.setPosition(boardx[randIntX], boardy[randIntY]);
+                FXGL.getGameWorld().addEntity(obstacle);
+            }
+        }
+        //记录生成障碍物所在的位置，防止与星星重合
+        obstaclePos[0] = randIntX;
+        obstaclePos[1] = randIntY;
+        System.out.println("Obstacle position:" + randIntX + "," + randIntY);
     }
 
-    public void initBottom() {
-        // 创建底板
-        bottomAccessory = getGameWorld().create("BasicBottom",new SpawnData());
-        // 设置底板位置，margin的左上下大小相同
-        double bottomMargin = (FXGL.getAppHeight()-bottomAccessory.getHeight())/2;
-        bottomAccessory.setPosition(bottomMargin,bottomMargin);
-        FXGL.getGameWorld().addEntity(bottomAccessory);
+    //随机在棋盘内产生星星
+    private void initStar() {
+
+        Random randomx = new Random();
+        Random randomy = new Random();
+        int boardx[]={88,225,363,500};
+        int boardy[]={88,225,363,500};
+
+        int j = 0;
+        for (int i = 0; i < info.starNum(); i++) {
+            Entity star = getGameWorld().create("StarAccessory", new SpawnData());
+
+            while (true) {
+                int randIntX = randomx.nextInt(4);
+                int randIntY = randomy.nextInt(4);
+                if (!((randIntX == 0 && randIntY == 0)
+                        ||(randIntX == 3 && randIntY == 3)
+                        ||(randIntX == obstaclePos[0] && randIntY == obstaclePos[1]))) {
+                    star.setPosition(boardx[randIntX], boardy[randIntY]);
+                    FXGL.getGameWorld().addEntity(star);
+                    System.out.println("Star position:" + randIntX + "," + randIntY);
+                    break;
+                }
+            }
+
+        }
     }
+
+    // 开始方块
     public void initStart() {
         // 创建起点
         Entity startAccessory = getGameWorld().create("StartAccessory",new SpawnData());
         // 设置起始点位置，方向
-        BroadData startData = broadDatas[info.startX()][info.startY()];
-        startAccessory.setPosition( startData.getPlace().subtract(startAccessory.getWidth()/2,startAccessory.getHeight()/2) );
+        Point2D startPlace = BottomCtrl.getPlacePoint(info.startX(),info.startY());
+        startAccessory.setPosition( startPlace.subtract(startAccessory.getWidth()/2,startAccessory.getHeight()/2) );
         startAccessory.setRotation(info.startAng());
         // 不能传形参，不然无法覆盖
-        broadDatas[info.startX()][info.startY()].setEntityType((GameType) startAccessory.getType());
-        broadDatas[info.startX()][info.startY()].setRotation(startAccessory.getRotation());
+        BottomCtrl.setType(info.startX(), info.startY(),(GameType) startAccessory.getType());
+        BottomCtrl.setRotation(info.startX(), info.startY(),startAccessory.getRotation());
         FXGL.getGameWorld().addEntity(startAccessory);
     }
-    /**
-     * 生成放置点
-     * @return
-     */
-    public void generatePlacePoints(){
-        int rows = info.bottomRows(),
-                cols = info.bottomCols();
-        // 得到底板中心点
-        Point2D center = new Point2D(bottomAccessory.getWidth()/2, bottomAccessory.getHeight()/2)
-                .add(bottomAccessory.getPosition());
-        FXGL.entityBuilder().view(new Rectangle(10,10, Color.RED)).at(center).build();
-        double width = bottomAccessory.getWidth()/rows,
-                height = bottomAccessory.getHeight()/cols;
-        width*=0.95;
-        height*=0.95;
-        // 以中心点为基准，设置物块放置点
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                broadDatas[i][j].setPlace(
-                        center.add(new Point2D((j-2)*height+height/2,(i-2)*width+width/2))
-                );
-            }
-        }
+    // 结束方块
+    private void initEnd() {
+        // 创建终点
+        Entity endAccessory = getGameWorld().create("EndAccessory",new SpawnData());
+        // 设置终点位置
+        Point2D endPlace = BottomCtrl.getPlacePoint(info.endX(), info.endY());
+        endAccessory.setPosition( endPlace.subtract(endAccessory.getWidth()/2,endAccessory.getHeight()/2) );
+        BottomCtrl.setType( info.endX(), info.endY() ,(GameType) endAccessory.getType());
+        FXGL.getGameWorld().addEntity(endAccessory);
+    }
+
+
+    // 按钮
+    private void initButton() {
+        Entity entity = getGameWorld().create("StartRunCar",new SpawnData());
+        entity.setPosition(610,50);
+        LocalTimer clickTimer = FXGL.newLocalTimer();
+        Duration timeGap = Duration.seconds(1);
+        EventHandler<MouseEvent> onClick = e-> {
+            if(!clickTimer.elapsed(timeGap))return;
+            clickTimer.capture();
+            CarCtrl.startRunCar();
+        };
+        entity.getViewComponent().addOnClickHandler(onClick);
+        getGameWorld().addEntity(entity);
+    }
+
+    public static Entity getObstacleEntity() {
+        return obstacle;
     }
 }

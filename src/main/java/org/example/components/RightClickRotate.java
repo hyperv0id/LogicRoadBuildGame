@@ -3,8 +3,9 @@ package org.example.components;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.ViewComponent;
 import javafx.scene.input.MouseButton;
+import org.example.app.BottomCtrl;
 import org.example.app.GameLevelCtrl;
-import org.example.info.BroadData;
+
 
 public class RightClickRotate extends Component {
     double angle;
@@ -25,7 +26,7 @@ public class RightClickRotate extends Component {
                 int row=entity.getInt("row"),col=entity.getInt("col");
                 // 删除非法输入
                 if (row<0 || col<0)return;
-                GameLevelCtrl.broadDatas[row][col].setRotation(entity.getRotation());
+                BottomCtrl.setRotation(row,col,entity.getRotation());
             }
         });
     }

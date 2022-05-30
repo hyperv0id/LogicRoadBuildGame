@@ -10,6 +10,8 @@ public record LevelInfo(
 	 int crossNum,
 	 int curveSquareNum,
 	 int startY,
-	 int startX
+	 int startX,
+	 int starNum,
+	 int obstacleNum
 )
 {}

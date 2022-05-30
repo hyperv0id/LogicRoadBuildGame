@@ -5,7 +5,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import org.example.GameType;
+
+import org.example.app.BottomCtrl;
 import org.example.app.GameLevelCtrl;
 import org.example.app.VarManager;
 
@@ -14,7 +15,7 @@ public class ReplaceAfterRelease extends Component {
     EventHandler<MouseEvent> onRelease = e-> {
         if (e.getButton() == MouseButton.SECONDARY)
             return;
-        if (entity.isColliding(GameLevelCtrl.bottomAccessory))
+        if (entity.isColliding(BottomCtrl.getEntity()) && !entity.isColliding(GameLevelCtrl.getObstacleEntity()))
             return;
         // TODO: 2022/5/22 添加运动动画，不然动作太单一
         entity.setPosition((Point2D) entity.getProperties().getObject("originPlace"));

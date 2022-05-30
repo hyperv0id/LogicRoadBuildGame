@@ -49,4 +49,5 @@ public class MyDraggable extends Component {
         Point2D mousePlace = FXGL.getInput().getMousePositionWorld();
         entity.setPosition( mousePlace.subtract(offset));
     }
+
 }

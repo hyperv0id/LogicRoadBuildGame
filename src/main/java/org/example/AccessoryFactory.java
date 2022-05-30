@@ -7,6 +7,8 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.texture.Texture;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.example.components.*;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
@@ -128,7 +130,8 @@ public class AccessoryFactory implements EntityFactory {
                 bottomSize/4, bottomSize/4);
         return   FXGL.entityBuilder()
                 .type(GameType.Starting_Point)
-                .viewWithBBox(startAccessory)
+                .view(startAccessory)
+                .bbox(BoundingShape.box(bottomSize/4, bottomSize/4))
                 .with(new RotateCenter(RotateCenter.CENTER))
                 .build();
     }
@@ -174,8 +177,9 @@ public class AccessoryFactory implements EntityFactory {
     public Entity newCar(SpawnData data) {
         Texture car = FXGL.texture("accessory/car.png", 35, 56);
         return FXGL.entityBuilder()
-                .type(GameType.PullBackCar)
+                .type(GameType.Car)
                 .viewWithBBox(car)
+                .collidable()
                 .with(new RotateCenter(RotateCenter.CENTER))
                 .build();
     }
@@ -188,6 +192,32 @@ public class AccessoryFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(GameType.StartRunCarButton)
                 .view(startPic)
+                .build();
+    }
+
+    @Spawns("Obstacle")
+    public Entity newObstacle(SpawnData data) {
+        Rectangle obstacle = new Rectangle(90,90);
+        obstacle.setFill(Color.WHITE);
+
+        return FXGL.entityBuilder()
+                .type(GameType.Obstacle)
+                .collidable()
+                .viewWithBBox(obstacle)
+                .build();
+    }
+
+    @Spawns("StarAccessory")
+    public Entity newStarAccessory (SpawnData data){
+        Texture StarAccessory= FXGL.texture(
+                "accessory/Star.png",
+                50,
+                50);
+        return   FXGL.entityBuilder()
+                .type(GameType.Star)
+                .viewWithBBox(StarAccessory)
+                .collidable()
+                //.bbox(BoundingShape.box(30,30))//目前应该没什么用
                 .build();
     }
 }

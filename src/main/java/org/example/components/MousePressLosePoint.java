@@ -4,7 +4,7 @@ import com.almasb.fxgl.entity.component.Component;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.example.GameType;
-import org.example.app.GameLevelCtrl;
+import org.example.app.BottomCtrl;
 
 public class MousePressLosePoint extends Component {
     @Override
@@ -15,7 +15,7 @@ public class MousePressLosePoint extends Component {
             if ("in".equals(entity.getString("lastPos"))){
                 int lastRow=entity.getInt("row"),lastCol=entity.getInt("col");
                 // 将上一次的方块置空
-                GameLevelCtrl.broadDatas[lastRow][lastCol].setEntityType(GameType.NONE);
+                BottomCtrl.setType(lastRow, lastCol, GameType.NONE);
             }
         });
     }

@@ -8,5 +8,7 @@
   "startY": 0,
   "startAng": 135.0,
   "endX": 3,
-  "endY": 3
+  "endY": 3,
+  "starNum": 2,
+  "obstacleNum": 1
 }

@@ -9,9 +9,10 @@ public enum GameType {
     Starting_Point,
     EndingPoint,
     Small_Ball,
-    PullBackCar,
+    Car,
     StartRunCarButton,
-
+    Obstacle,
     BOX,
+    Star,
     NONE, RestartLevelButton
 }
