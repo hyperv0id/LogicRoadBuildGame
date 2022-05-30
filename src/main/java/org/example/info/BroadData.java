@@ -1,6 +1,5 @@
 package org.example.info;
 
-import com.almasb.fxgl.entity.Entity;
 import javafx.geometry.Point2D;
 import org.example.GameType;
 

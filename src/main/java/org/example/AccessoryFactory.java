@@ -220,4 +220,18 @@ public class AccessoryFactory implements EntityFactory {
                 //.bbox(BoundingShape.box(30,30))//目前应该没什么用
                 .build();
     }
+
+
+    @Spawns("GhostCar")
+    public Entity newGhostCar(SpawnData data){
+        Texture car = FXGL.texture("accessory/car.png", 35, 56);
+        Entity e =  FXGL.entityBuilder()
+                .type(GameType.Car)
+                .viewWithBBox(car)
+                .collidable()
+                .with(new RotateCenter(RotateCenter.CENTER))
+                .build();
+        e.setOpacity(100);
+        return e;
+    }
 }

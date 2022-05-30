@@ -2,8 +2,6 @@ package org.example.app;
 
 import com.almasb.fxgl.dsl.FXGL;
 
-import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import javafx.animation.FadeTransition;
 import javafx.animation.PathTransition;
 import javafx.scene.image.Image;
@@ -11,14 +9,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.*;
 import javafx.util.Duration;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 
 public class CarCtrl {
 
     public static void startRunCar() {
         Path path = BottomCtrl.getPath();
 
-        Entity myCar = getGameWorld().create("Car",new SpawnData());
+        // Entity myCar = getGameWorld().create("Car",new SpawnData());
         Image image = new Image("assets/textures/accessory/car.png");
         ImageView iv = new ImageView(image);
         iv.setX(2);

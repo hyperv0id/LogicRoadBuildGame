@@ -18,13 +18,14 @@ public class BottomCtrl {
     static Point2D[][] placePoints_ = new Point2D[0][];
     static GameType[][] types = new GameType[0][];
     static double[][] angles = new double[0][];
-
+    static boolean[][] haveStar;
     public static void init(int rows, int cols) {
         rows_ = rows;
         cols_ = cols;
         placePoints_ = new Point2D[rows_][cols_];
         types = new GameType[rows_][cols_];
         angles = new double[rows_][cols_];
+        haveStar = new boolean[rows_][cols_];
         // 创建实体
         initBottom();
         // 放置点
@@ -129,8 +130,6 @@ public class BottomCtrl {
             }case Hyperbola, Arc -> {
                 Point2D cent = getPlacePoint(x,y);
                 Point2D to = cent.add(getOffset(out));
-                Point2D from = cent.add(getOffset(in));
-                Point2D gap = from.subtract(to);
                 QuadCurveTo qct = new QuadCurveTo();
                 qct.setX(to.getX());
                 qct.setY(to.getY());
@@ -138,10 +137,22 @@ public class BottomCtrl {
                 qct.setControlY(cent.getY());
                 e = qct;
             }
+            default -> throw new IllegalArgumentException("Unexpected value: " + type);
         }
         return e;
     }
 
+    /**
+     * 将组件放置到棋盘上的对应位置
+     * @param entity 组件对象
+     * @param x 放到第几行
+     * @param y 放到第几列
+     */
+    public static void setPosition(Entity entity, int x,int y){
+        Point2D p2d = getPlacePoint(x, y);
+        Point2D entitySize = new Point2D(entity.getWidth()/2,entity.getHeight()/2);
+        entity.setPosition(p2d.subtract(entitySize));
+    }
     /**
      * 生成放置点
      * @return
@@ -173,7 +184,8 @@ public class BottomCtrl {
         double dy = Math.cos(ang);
         if(Math.abs(dx-0)>1e-5){
             dx /= Math.abs(dx);
-        }if (Math.abs(dy-0)>1e-5){
+        }
+        if (Math.abs(dy-0)>1e-5){
             dy /= -Math.abs(dy);
         }
 
@@ -206,6 +218,7 @@ public class BottomCtrl {
             case Arc -> {
                 startEnd = new int[][]{{0,5},{5,0}};
             }
+            default -> throw new IllegalArgumentException("Unexpected value: " + types[row_n][col_n]);
         }
 
         for (int[] pair : startEnd) {
@@ -271,6 +284,15 @@ public class BottomCtrl {
     public static void setRotation(int x, int y, double ang){
         assert x>=0&&y>=0&&x<rows_&&y<cols_;
         angles[x][y] = ang;
+    }
+
+    /**
+     * 设置星星
+     * @param x 行号
+     * @param y 列号
+     */
+    public static void setStar(int x, int y, boolean isStar) {
+        BottomCtrl.haveStar[x][y] = isStar;
     }
 
 

@@ -4,7 +4,6 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.ViewComponent;
 import javafx.scene.input.MouseButton;
 import org.example.app.BottomCtrl;
-import org.example.app.GameLevelCtrl;
 
 
 public class RightClickRotate extends Component {

@@ -11,7 +11,6 @@ import javafx.util.Duration;
 import org.example.GameType;
 import org.example.components.MousePressLosePoint;
 import org.example.info.LevelInfo;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,19 +20,18 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 public class GameLevelCtrl {
     // 所有积木，包括开始结束，方圆弯道
     private static ArrayList<Entity> accessories = new ArrayList<>();
-
+    private static ArrayList<Entity> obstacles = new ArrayList<>();
     public static LevelInfo getInfo() {
         return info;
     }
 
-    public static Entity obstacle;
     private static LevelInfo info;
 
     public GameLevelCtrl(LevelInfo info) {
-        this.info = info;
+        GameLevelCtrl.info = info;
     }
     public GameLevelCtrl(String levelInfo) {
-        this.info = FXGL.getAssetLoader().loadJSON(levelInfo,LevelInfo.class).get();
+        GameLevelCtrl.info = FXGL.getAssetLoader().loadJSON(levelInfo,LevelInfo.class).get();
         FXGL.set("crossNum",info.crossNum());
         FXGL.set("hyperbolaNum",info.curveSquareNum());
         FXGL.set("arcNum",info.curveOrbitNum());
@@ -54,7 +52,8 @@ public class GameLevelCtrl {
 
     // 基本可放置方块
     public void initAccessories() {
-        double w=FXGL.getAppWidth(),h=FXGL.getAppHeight();
+        // double w=FXGL.getAppWidth();
+        double h=FXGL.getAppHeight();
         // 创建多个十字形组件
         for (int i = 0; i < info.crossNum(); i++) {
             Entity cross = getGameWorld().create("CrossAccessory",new SpawnData());
@@ -85,53 +84,55 @@ public class GameLevelCtrl {
     //随机在棋盘内产生一个障碍物
     int[] obstaclePos = new int[2];
     private void initObstacle() {
-
-        Random randomx = new Random();
-        Random randomy = new Random();
-        int boardx[]={70,207,343,480};
-        int boardy[]={70,207,343,480};
-
-        int j = 0;
-        int randIntX = randomx.nextInt(4);
-        int randIntY = randomy.nextInt(4);
+        Random rand = new Random();
+        // int j = 0;
+        int x = rand.nextInt(4);
+        int y = rand.nextInt(4);
         for (int i = 0; i < info.obstacleNum(); i++) {
-            obstacle = getGameWorld().create("Obstacle", new SpawnData());
-            if (!((randIntX == 0 && randIntY == 0)||(randIntX == 3 && randIntY == 3))) {
-                obstacle.setPosition(boardx[randIntX], boardy[randIntY]);
-                FXGL.getGameWorld().addEntity(obstacle);
+            Entity obstacle = getGameWorld().create("Obstacle", new SpawnData());
+            while (true) {
+                if (!((x == 0 && y == 0)
+                        ||(x == 3 && y == 3)
+                        ||(x == 1 && y == 1))) {
+                            BottomCtrl.setPosition(obstacle, x, y);
+                            obstacle.setProperty("row", x);
+                            obstacle.setProperty("col", y);
+                            BottomCtrl.setType(x, y, (GameType)obstacle.getType());
+                            FXGL.getGameWorld().addEntity(obstacle);
+                            obstacles.add(obstacle);
+                        break;
+                }
             }
         }
         //记录生成障碍物所在的位置，防止与星星重合
-        obstaclePos[0] = randIntX;
-        obstaclePos[1] = randIntY;
-        System.out.println("Obstacle position:" + randIntX + "," + randIntY);
+        obstaclePos[0] = x;
+        obstaclePos[1] = y;
+        System.out.println("Obstacle position:" + x + "," + y);
     }
 
     //随机在棋盘内产生星星
+    static int[][] starPos = new int[2][2];//记录星星的位置
     private void initStar() {
-
-        Random randomx = new Random();
-        Random randomy = new Random();
-        int boardx[]={88,225,363,500};
-        int boardy[]={88,225,363,500};
-
-        int j = 0;
+        Random rand = new Random();
+        // int j = 0;
         for (int i = 0; i < info.starNum(); i++) {
             Entity star = getGameWorld().create("StarAccessory", new SpawnData());
 
             while (true) {
-                int randIntX = randomx.nextInt(4);
-                int randIntY = randomy.nextInt(4);
-                if (!((randIntX == 0 && randIntY == 0)
-                        ||(randIntX == 3 && randIntY == 3)
-                        ||(randIntX == obstaclePos[0] && randIntY == obstaclePos[1]))) {
-                    star.setPosition(boardx[randIntX], boardy[randIntY]);
-                    FXGL.getGameWorld().addEntity(star);
-                    System.out.println("Star position:" + randIntX + "," + randIntY);
-                    break;
-                }
+                int x = rand.nextInt(4);
+                int y = rand.nextInt(4);
+                if ((x == 0 && y == 0)
+                        ||(x == 3 && y == 3)
+                        ||(BottomCtrl.getType(x, y)==GameType.Obstacle)
+                        ||(x == starPos[0][0] && x == starPos[0][1]))
+                        continue;
+                BottomCtrl.setPosition(star,x, y);
+                BottomCtrl.setStar(x,y, true);
+                FXGL.getGameWorld().addEntity(star);
+                starPos[i][0] = x;
+                starPos[i][1] = y;
+                break;
             }
-
         }
     }
 
@@ -175,7 +176,7 @@ public class GameLevelCtrl {
         getGameWorld().addEntity(entity);
     }
 
-    public static Entity getObstacleEntity() {
-        return obstacle;
+    public static ArrayList<Entity> getObstacles() {
+        return obstacles;
     }
 }

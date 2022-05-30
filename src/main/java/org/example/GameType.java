@@ -14,5 +14,7 @@ public enum GameType {
     Obstacle,
     BOX,
     Star,
-    NONE, RestartLevelButton
+    NONE, 
+    RestartLevelButton,
+    GhostCar
 }
