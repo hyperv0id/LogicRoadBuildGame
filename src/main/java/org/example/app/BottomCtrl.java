@@ -9,6 +9,8 @@ import javafx.scene.shape.*;
 import org.example.GameType;
 import org.example.info.LevelInfo;
 
+import java.util.ArrayList;
+
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 
 public class BottomCtrl {
@@ -19,6 +21,11 @@ public class BottomCtrl {
     static GameType[][] types = new GameType[0][];
     static double[][] angles = new double[0][];
     static boolean[][] haveStar;
+
+    /** 初始化
+     * @param rows 有几行
+     * @param cols 有几列
+     */
     public static void init(int rows, int cols) {
         rows_ = rows;
         cols_ = cols;
@@ -36,13 +43,13 @@ public class BottomCtrl {
         initGameType();
         // 初始化角度
         initAngle();
-
-        // todo: 删除测试函数
-//        testCorner();
-//        testCenter();
     }
 
     // ===================================
+
+    /**
+     * 初始化底板实体
+     */
     private static void initBottom() {
         // 创建底板
         bottomAccessory = getGameWorld().create("BasicBottom",new SpawnData());
@@ -52,6 +59,9 @@ public class BottomCtrl {
         FXGL.getGameWorld().addEntity(bottomAccessory);
     }
 
+    /**
+     * 初始化角度的信息
+     */
     private static void initAngle() {
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
@@ -60,6 +70,9 @@ public class BottomCtrl {
         }
     }
 
+    /**
+     * 初始化实体类型的信息
+     */
     private static void initGameType() {
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
@@ -68,6 +81,9 @@ public class BottomCtrl {
         }
     }
 
+    /**
+     * 初始化不同角度下的坐标偏移
+     */
     private static void generateCornerOffset() {
         double scale = bottomAccessory.getWidth()/9.5;
         for (int i = 0; i < outPlace.length; i++) {
@@ -77,8 +93,11 @@ public class BottomCtrl {
         }
     }
 
-    public static Path getPath() {
 
+    /**
+     * 得到小车运动轨迹
+     */
+    public static Path getPath() {
         Path path = new Path();
         path.setStrokeWidth(2);
         path.setStroke(Color.web("#bc646c"));
@@ -101,7 +120,7 @@ public class BottomCtrl {
             outPoint = getOutPoint(np[0],np[1],inPoint);
             if (outPoint!=-1){
                 // 根据出入情况绘制曲线
-                path.getElements().add(innerPath(np[0],np[1], inPoint, outPoint));
+                path.getElements().add(innerPath(np[0],np[1], outPoint));
                 // 准备下一次循环
                 np = getNextBroad(np[0],np[1],outPoint);
             }else{
@@ -120,7 +139,20 @@ public class BottomCtrl {
         return path;
     }
 
-    public static PathElement innerPath(int x, int y, int in, int out){
+    public static ArrayList<Path> getPathList(){
+        ArrayList<Path> plist = new ArrayList<>();
+        Path path = new Path();
+        // TODO: 2022/5/31 完善函数
+        return plist;
+    }
+
+    /**
+     * 得到内部曲线
+     * @param x 第几行
+     * @param y 第几列
+     * @param out 出口在哪个方向
+     */
+    public static PathElement innerPath(int x, int y, int out){
         PathElement e = null;
         GameType type = getType(x,y);
         switch (type){
@@ -137,7 +169,6 @@ public class BottomCtrl {
                 qct.setControlY(cent.getY());
                 e = qct;
             }
-            default -> throw new IllegalArgumentException("Unexpected value: " + type);
         }
         return e;
     }
@@ -155,7 +186,6 @@ public class BottomCtrl {
     }
     /**
      * 生成放置点
-     * @return
      */
     public static void generatePlacePoints(){
         int rows = rows_,
@@ -192,7 +222,7 @@ public class BottomCtrl {
         int nx = row_n + (int)dy, ny = col_n + (int)dx;
         if (nx<0||nx>= rows_ || ny<0||ny>=cols_){
             return null;
-        };
+        }
         return new int[]{nx, ny};
     }
 
@@ -209,16 +239,9 @@ public class BottomCtrl {
         // 范围 0-8
         int dAng = ((int) angles[row_n][col_n])%360 / 45;
         switch (types[row_n][col_n]){
-            case Cross -> {
-                startEnd = new int[][]{{1,5},{5,1},{3,7},{7,3}};
-            }
-            case Hyperbola -> {
-                startEnd = new int[][]{{1, 3},{3, 1},{5,7},{7,5}};
-            }
-            case Arc -> {
-                startEnd = new int[][]{{0,5},{5,0}};
-            }
-            default -> throw new IllegalArgumentException("Unexpected value: " + types[row_n][col_n]);
+            case Cross -> startEnd = new int[][]{{1,5},{5,1},{3,7},{7,3}};
+            case Hyperbola -> startEnd = new int[][]{{1, 3},{3, 1},{5,7},{7,5}};
+            case Arc -> startEnd = new int[][]{{0,5},{5,0}};
         }
 
         for (int[] pair : startEnd) {
@@ -295,5 +318,32 @@ public class BottomCtrl {
         BottomCtrl.haveStar[x][y] = isStar;
     }
 
-
+    public static Point2D getClosestRowCol(Point2D point){
+        double dist = 1e9;
+        Point2D ret = new Point2D(-1,-1);
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getCols(); j++) {
+                double nd = point.distance(getPlacePoint(i,j));
+                if(dist>=nd){
+                    dist = nd;
+                    ret = new Point2D(i,j);
+                }
+            }
+        }
+        return ret;
+    }
+    public static Point2D getClosestPlacePoint(Point2D point){
+        double dist = 1e9;
+        Point2D ret = null;
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getCols(); j++) {
+                double nd = point.distance(getPlacePoint(i,j));
+                if(dist>=nd){
+                    dist = nd;
+                    ret = getPlacePoint(i,j);
+                }
+            }
+        }
+        return ret;
+    }
 }

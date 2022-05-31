@@ -3,7 +3,6 @@ package org.example;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
-
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.paint.Color;
@@ -16,16 +15,16 @@ import java.util.Map;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 
 /**
- * Main类，继承自 GameApplication
+ * Main 类，继承自 GameApplication
  */
-public class Main extends GameApplication {
+public class GameApp extends GameApplication {
     public static void main(String[] args) {
         launch(args);
     }
     // 随便改的一点代码
     @Override
     protected void initSettings(GameSettings gameSettings) {
-        /**
+        /*
          * 基本游戏设置
          */
         gameSettings.setTitle("Logic Road Game");
@@ -45,20 +44,15 @@ public class Main extends GameApplication {
         new GameLevelCtrl("data/levelInfo.json").init();
     }
 
-    /**
-     * @param vars
-     */
+
     @Override
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("crossNum",0);
         vars.put("hyperbolaNum",0);
         vars.put("arcNum",0);
-//        vars.put()
     }
 
-    /**
-     *
-     */
+
     @Override
     protected void initUI() {
         //显示组件的剩余数量
@@ -84,11 +78,12 @@ public class Main extends GameApplication {
     protected void initPhysics() {
         FXGL.getPhysicsWorld().addCollisionHandler(
                 new CollisionHandler(GameType.Car,GameType.Star) {
-            @Override
-            protected void onCollisionBegin(Entity car, Entity star) {
-                star.removeFromWorld();
-            }
-        });
+                    @Override
+                    protected void onCollisionBegin(Entity car, Entity star) {
+                        System.out.println("collision to star");
+                        star.removeFromWorld();
+                    }
+                });
     }
 
     @Override

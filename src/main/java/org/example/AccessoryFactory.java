@@ -231,7 +231,7 @@ public class AccessoryFactory implements EntityFactory {
                 .collidable()
                 .with(new RotateCenter(RotateCenter.CENTER))
                 .build();
-        e.setOpacity(100);
+        e.setOpacity(0);
         return e;
     }
 }
