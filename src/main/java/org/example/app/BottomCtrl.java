@@ -14,21 +14,24 @@ import java.util.ArrayList;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 
 public class BottomCtrl {
-    static Entity bottomAccessory;
-    static Point2D[] outPlace = new Point2D[8];
-    static int rows_,cols_;
-    static Point2D[][] placePoints_ = new Point2D[0][];
-    static GameType[][] types = new GameType[0][];
-    static double[][] angles = new double[0][];
-    static boolean[][] haveStar;
+    private static Entity bottomAccessory;
+    private static Point2D[] outPlace = new Point2D[8];
+    private static int rows_,cols_;
+    private static Point2D[][] placePoints_ = new Point2D[0][];
+    private static GameType[][] types = new GameType[0][];
+    private static double[][] angles = new double[0][];
+    private static boolean[][] haveStar;
+    public static Point2D Starting_Point;
+    public static Point2D Ending_Point;
+
 
     /** 初始化
      * @param rows 有几行
      * @param cols 有几列
      */
-    public static void init(int rows, int cols) {
-        rows_ = rows;
-        cols_ = cols;
+    public static void init(LevelInfo info){
+        rows_ = info.bottomRows();
+        cols_ = info.bottomCols();
         placePoints_ = new Point2D[rows_][cols_];
         types = new GameType[rows_][cols_];
         angles = new double[rows_][cols_];
@@ -43,6 +46,9 @@ public class BottomCtrl {
         initGameType();
         // 初始化角度
         initAngle();
+
+        Starting_Point = getPlacePoint(info.startX(), info.startY());
+        Ending_Point = getPlacePoint(info.endX(), info.endY());
     }
 
     // ===================================
@@ -139,11 +145,11 @@ public class BottomCtrl {
         return path;
     }
 
-    public static ArrayList<Path> getPathList(){
-        ArrayList<Path> plist = new ArrayList<>();
-        Path path = new Path();
+    public static ArrayList<MyPathTransition> getPathList(){
+        ArrayList<MyPathTransition> playList = new ArrayList<>();
+        // Path path = new Path();
         // TODO: 2022/5/31 完善函数
-        return plist;
+        return playList;
     }
 
     /**
@@ -169,6 +175,7 @@ public class BottomCtrl {
                 qct.setControlY(cent.getY());
                 e = qct;
             }
+            default -> {}
         }
         return e;
     }
@@ -181,6 +188,16 @@ public class BottomCtrl {
      */
     public static void setPosition(Entity entity, int x,int y){
         Point2D p2d = getPlacePoint(x, y);
+        Point2D entitySize = new Point2D(entity.getWidth()/2,entity.getHeight()/2);
+        entity.setPosition(p2d.subtract(entitySize));
+    }
+    /**
+     * 将组件放置到棋盘上的对应位置
+     * @param entity 组件对象
+     * @param x 放到第几行
+     * @param y 放到第几列
+     */
+    public static void setPosition(Entity entity, Point2D p2d){
         Point2D entitySize = new Point2D(entity.getWidth()/2,entity.getHeight()/2);
         entity.setPosition(p2d.subtract(entitySize));
     }
@@ -242,6 +259,7 @@ public class BottomCtrl {
             case Cross -> startEnd = new int[][]{{1,5},{5,1},{3,7},{7,3}};
             case Hyperbola -> startEnd = new int[][]{{1, 3},{3, 1},{5,7},{7,5}};
             case Arc -> startEnd = new int[][]{{0,5},{5,0}};
+            default -> {}
         }
 
         for (int[] pair : startEnd) {
@@ -345,5 +363,10 @@ public class BottomCtrl {
             }
         }
         return ret;
+    }
+
+
+    public static boolean haveStar(int x,int y){
+        return haveStar[x][y];
     }
 }

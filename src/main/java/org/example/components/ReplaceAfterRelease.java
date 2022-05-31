@@ -1,18 +1,13 @@
 package org.example.components;
 
-import java.util.ArrayList;
-
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
-import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 
 import org.example.app.BottomCtrl;
 import org.example.app.EntityCtrl;
-import org.example.app.GameLevelCtrl;
-import org.example.app.VarManager;
+
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 public class ReplaceAfterRelease extends Component {
 

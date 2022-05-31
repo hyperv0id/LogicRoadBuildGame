@@ -25,13 +25,13 @@ public class GameLevelCtrl {
         return info;
     }
 
-    private static LevelInfo info;
-
+    protected static LevelInfo info;
+    protected GameLevelCtrl(){}
     public GameLevelCtrl(LevelInfo info) {
         GameLevelCtrl.info = info;
     }
     public GameLevelCtrl(String levelInfo) {
-        GameLevelCtrl.info = FXGL.getAssetLoader().loadJSON(levelInfo,LevelInfo.class).get();
+        info = FXGL.getAssetLoader().loadJSON(levelInfo,LevelInfo.class).get();
         FXGL.set("crossNum",info.crossNum());
         FXGL.set("hyperbolaNum",info.curveSquareNum());
         FXGL.set("arcNum",info.curveOrbitNum());
@@ -40,7 +40,7 @@ public class GameLevelCtrl {
     }
 
     public void init(){
-        BottomCtrl.init(info.bottomRows(), info.bottomCols());
+        BottomCtrl.init(info);
         initStart();
         initEnd();
         initAccessories();
@@ -82,8 +82,7 @@ public class GameLevelCtrl {
     }
 
     //随机在棋盘内产生一个障碍物
-    int[] obstaclePos = new int[2];
-    private void initObstacle() {
+    protected void initObstacle() {
         Random rand = new Random();
         // int j = 0;
         int x = rand.nextInt(4);
@@ -104,15 +103,11 @@ public class GameLevelCtrl {
                 }
             }
         }
-        //记录生成障碍物所在的位置，防止与星星重合
-        obstaclePos[0] = x;
-        obstaclePos[1] = y;
-        System.out.println("Obstacle position:" + x + "," + y);
     }
 
     //随机在棋盘内产生星星
     static int[][] starPos = new int[2][2];//记录星星的位置
-    private void initStar() {
+    protected void initStar() {
         Random rand = new Random();
         // int j = 0;
         for (int i = 0; i < info.starNum(); i++) {
@@ -124,7 +119,8 @@ public class GameLevelCtrl {
                 if ((x == 0 && y == 0)
                         ||(x == 3 && y == 3)
                         ||(BottomCtrl.getType(x, y)==GameType.Obstacle)
-                        ||(x == starPos[0][0] && x == starPos[0][1]))
+                        ||(x == starPos[0][0] && x == starPos[0][1])
+                        ||(BottomCtrl.haveStar(x,y)))
                         continue;
                 BottomCtrl.setPosition(star,x, y);
                 BottomCtrl.setStar(x,y, true);
@@ -150,7 +146,7 @@ public class GameLevelCtrl {
         FXGL.getGameWorld().addEntity(startAccessory);
     }
     // 结束方块
-    private void initEnd() {
+    protected void initEnd() {
         // 创建终点
         Entity endAccessory = getGameWorld().create("EndAccessory",new SpawnData());
         // 设置终点位置
@@ -162,7 +158,11 @@ public class GameLevelCtrl {
 
 
     // 按钮
-    private void initButton() {
+    protected void initButton() {
+        initStartRunBtn();
+    }
+
+    private void initStartRunBtn() {
         Entity entity = getGameWorld().create("StartRunCar",new SpawnData());
         entity.setPosition(610,50);
         LocalTimer clickTimer = FXGL.newLocalTimer();

@@ -4,15 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d2fabd3c-334a-4a79-8991-fd6adc91ab9b" name="Changes" comment="添加Main类的doc">
+    <list default="true" id="d2fabd3c-334a-4a79-8991-fd6adc91ab9b" name="Changes" comment="优化代码逻辑">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/AccessoryFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/AccessoryFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/GameApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/GameApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/GameApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/app/BottomCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/app/BottomCtrl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/app/CarCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/app/CarCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/components/MyCloseToPlacePoints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/components/MyCloseToPlacePoints.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/components/ReplaceAfterRelease.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/components/ReplaceAfterRelease.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/info/BroadData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/app/GameLevelCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/app/GameLevelCtrl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/app/MyPathTransition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/app/MyPathTransition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/net/MyServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/net/ServerReaderRunnable.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +23,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Record" />
       </list>
     </option>
   </component>
@@ -43,10 +44,12 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;OverrideImplement.generate.javadoc&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/Users/23859/Desktop/cw/GameCopy0527&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;库&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
@@ -117,7 +120,8 @@
       <workItem from="1653898095040" duration="954000" />
       <workItem from="1653899648004" duration="1054000" />
       <workItem from="1653913729468" duration="16139000" />
-      <workItem from="1653972507122" duration="3966000" />
+      <workItem from="1653972507122" duration="10776000" />
+      <workItem from="1654002006782" duration="7941000" />
     </task>
     <task id="LOCAL-00001" summary="添加Main类的doc">
       <created>1653899666012</created>
@@ -140,7 +144,14 @@
       <option name="project" value="LOCAL" />
       <updated>1653900160936</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="优化代码逻辑">
+      <created>1653978896381</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1653978896381</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -151,7 +162,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -160,6 +183,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="添加Main类的doc" />
     <MESSAGE value="16:42 - 添加Main类的doc" />
-    <option name="LAST_COMMIT_MESSAGE" value="16:42 - 添加Main类的doc" />
+    <MESSAGE value="优化代码逻辑" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化代码逻辑" />
   </component>
 </project>

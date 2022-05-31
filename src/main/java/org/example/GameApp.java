@@ -1,18 +1,20 @@
 package org.example;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+
+import java.util.Map;
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
+
+import org.example.app.DesignModeCtrl;
 import org.example.app.GameLevelCtrl;
 
-
-import java.util.Map;
-
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 /**
  * Main 类，继承自 GameApplication
@@ -41,7 +43,9 @@ public class GameApp extends GameApplication {
         // 配件工厂
         FXGL.getGameWorld().addEntityFactory(new AccessoryFactory());
         FXGL.spawn("box");
-        new GameLevelCtrl("data/levelInfo.json").init();
+        // TODO: 2022/5/31 再添加UI后一个根据选择的游戏模式的不同执行不同函数
+       new GameLevelCtrl("data/levelInfo.json").init();
+        // new DesignModeCtrl("data/DesignInfo.json").init();
     }
 
 
