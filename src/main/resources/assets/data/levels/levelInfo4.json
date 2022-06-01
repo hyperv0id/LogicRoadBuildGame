@@ -1,0 +1,14 @@
+{
+  "bottomRows": 4,
+  "bottomCols": 4,
+  "crossNum": 6,
+  "curveSquareNum": 6,
+  "curveOrbitNum": 4,
+  "startX": 0,
+  "startY": 0,
+  "startAng": 135.0,
+  "endX": 3,
+  "endY": 3,
+  "starNum": 2,
+  "obstacleNum": 1
+}

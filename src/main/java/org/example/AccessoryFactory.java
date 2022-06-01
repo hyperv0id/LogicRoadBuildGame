@@ -1,5 +1,8 @@
 package org.example;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
+
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
@@ -7,12 +10,12 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.texture.Texture;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import org.example.components.*;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
+import org.example.components.MyCloseToPlacePoints;
+import org.example.components.MyDraggable;
+import org.example.components.ReplaceAfterRelease;
+import org.example.components.RightClickRotate;
+import org.example.components.RotateCenter;
 
 
 public class AccessoryFactory implements EntityFactory {
@@ -195,16 +198,30 @@ public class AccessoryFactory implements EntityFactory {
                 .build();
     }
 
+    @Spawns("ReplaceButton")
+    public Entity Replace(SpawnData data){
+        Texture ReplacePic = FXGL.texture("ui/RESET.png");
+        return FXGL.entityBuilder()
+                .type(GameType.ReplaceButton)
+                .view(ReplacePic)
+                .build();
+    }
+
     @Spawns("Obstacle")
     public Entity newObstacle(SpawnData data) {
-        Rectangle obstacle = new Rectangle(90,90);
-        obstacle.setFill(Color.WHITE);
-
-        return FXGL.entityBuilder()
+        Texture obstacle = FXGL.texture("accessory/boom.png");
+//        obstacle.setScaleX(1/9.0);
+//        obstacle.setScaleY(1/9.0);
+        Entity e =  FXGL.entityBuilder()
                 .type(GameType.Obstacle)
                 .collidable()
-                .viewWithBBox(obstacle)
+                .view(obstacle)
+                .bbox(BoundingShape.box(10,10))
                 .build();
+//        e.setScaleOrigin(new Point2D(e.getWidth()/3,e.getHeight()/3));
+        e.setScaleX(0.5);
+        e.setScaleY(0.5);
+        return  e;
     }
 
     @Spawns("StarAccessory")
@@ -233,5 +250,14 @@ public class AccessoryFactory implements EntityFactory {
                 .build();
         e.setOpacity(0);
         return e;
+    }
+    //星星探测器，用来检测星星的位置，只有大小没有图像
+    @Spawns("StarDetector")
+    public Entity newStarDetector (SpawnData data) {
+        return FXGL.entityBuilder()
+        .type(GameType.StarDetector)
+        .bbox(BoundingShape.box(60,60))
+        .collidable()
+        .build();
     }
 }

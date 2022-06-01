@@ -173,6 +173,8 @@ public class BottomCtrl {
      */
     public static void setPosition(Entity entity, int x,int y){
         Point2D p2d = getPlacePoint(x, y);
+        entity.setProperty("row", x);
+        entity.setProperty("col", y);
         Point2D entitySize = new Point2D(entity.getWidth()/2,entity.getHeight()/2);
         entity.setPosition(p2d.subtract(entitySize));
     }

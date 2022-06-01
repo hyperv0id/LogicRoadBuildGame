@@ -22,10 +22,11 @@ public class GameLevelCtrl {
     // 所有积木，包括开始结束，方圆弯道
     private static ArrayList<Entity> accessories = new ArrayList<>();
     protected static ArrayList<Entity> obstacles = new ArrayList<>();
+    protected static ArrayList<Entity> stars = new ArrayList<>();
 
     protected static LevelInfo info;
-    private Entity endAccessory;
-    private Entity startAccessory;
+    private static Entity endAccessory;
+    private static Entity startAccessory;
     protected GameLevelCtrl(){}
     
     
@@ -55,6 +56,8 @@ public class GameLevelCtrl {
         initAccessories();
         // 初始化按钮
         initButton();
+        
+        initReplace();
         initObstacle();
         initStar();
         initUI();
@@ -155,6 +158,7 @@ public class GameLevelCtrl {
                 BottomCtrl.setPosition(star,x, y);
                 BottomCtrl.setStar(x,y, true);
                 FXGL.getGameWorld().addEntity(star);
+                stars.add(star);
                 break;
             }
         }
@@ -202,6 +206,26 @@ public class GameLevelCtrl {
         };
         entity.getViewComponent().addOnClickHandler(onClick);
         getGameWorld().addEntity(entity);
+    }
+    private void initReplace(){
+        Entity entity1 = getGameWorld().create("ReplaceButton",new SpawnData());
+        entity1.setPosition(610,200);
+        LocalTimer clickTimer1 = FXGL.newLocalTimer();
+        Duration timeGap1 = Duration.seconds(1);
+        EventHandler<MouseEvent> onClick1 = e-> {
+            if(!clickTimer1.elapsed(timeGap1))return;
+            clickTimer1.capture();
+            for(Entity entity2:accessories){
+                GameType type = (GameType)entity2.getType();
+                switch (type) {
+                    case Arc,Cross,Hyperbola->
+                EntityCtrl.backToCardSlot(entity2);
+                default ->{}
+                }
+            }
+        };
+        entity1.getViewComponent().addOnClickHandler(onClick1);
+        getGameWorld().addEntity(entity1);
     }
 
     public static ArrayList<Entity> getObstacles() {

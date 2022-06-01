@@ -16,5 +16,5 @@ public enum GameType {
     Star,
     NONE, 
     RestartLevelButton,
-    GhostCar
+    GhostCar, ReplaceButton, StarDetector
 }

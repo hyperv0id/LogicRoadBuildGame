@@ -93,7 +93,8 @@ public class EntityCtrl {
         Point2D np = entity.getPosition();
         int lastRow = entity.getProperties().getInt("row");
         int lastCol = entity.getProperties().getInt("col");
-        if(lastRow==-1 && lastCol==-1){
+        if(lastRow<0 || lastCol<0 || lastRow>=4 || lastCol>=4){
+            // 表示组件可以跳出到地图外面，所以要回到卡牌槽
             backToCardSlot(entity);
             return;
         }
@@ -121,6 +122,10 @@ public class EntityCtrl {
     }
     
     public static void backToCardSlot(Entity entity){
+        int row = entity.getInt("row"), col = entity.getInt("col");
+        if(row>=0&&col>=0&&row<BottomCtrl.getRows()&&col<BottomCtrl.getCols()){
+            BottomCtrl.setType(row, col, GameType.NONE);
+        }
         Point2D np = entity.getPosition();
         Point2D op = (Point2D) entity.getProperties().getObject("originPlace");
         
@@ -136,6 +141,7 @@ public class EntityCtrl {
             @Override
             public void run() {
                 entity.setRotation(0);
+                entity.setPosition(op);
                 String lastPos = entity.getString("lastPos");
                 if(lastPos.equals("in")){
                     VarManager.inc(entity.getType(),1);

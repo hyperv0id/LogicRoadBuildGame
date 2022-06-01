@@ -44,6 +44,7 @@ public class DesignModeCtrl extends GameLevelCtrl{
         initStar();
     }
 
+
     public void initObstacle(){
         super.initObstacle();
         for (Entity entity : obstacles) {

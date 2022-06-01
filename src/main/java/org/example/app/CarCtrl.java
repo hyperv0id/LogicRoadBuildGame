@@ -23,10 +23,8 @@ public class CarCtrl {
         genPath();
         genGhostAnim();
         genPathT();
-
         ghostAnim.buildAndPlay();
         pt.play();
-        
         FXGL.addUINode(pt.getNode());
         
     }
