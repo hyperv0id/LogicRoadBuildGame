@@ -2,6 +2,7 @@ package org.example.components;
 
 import com.almasb.fxgl.entity.component.Component;
 
+import org.example.GameType;
 import org.example.app.BottomCtrl;
 import org.example.app.EntityCtrl;
 
@@ -18,7 +19,11 @@ public class ReplaceAfterRelease extends Component {
         if (entity.isColliding(BottomCtrl.getEntity())){
             return;
         }
-        EntityCtrl.backToCardSlot(entity);
+        GameType type = (GameType)entity.getType();
+        switch(type){
+            case Arc, Hyperbola,Cross->EntityCtrl.backToCardSlot(entity);
+            default -> EntityCtrl.backToLastPlace(entity, type);
+        }
     };
 
     /**

@@ -224,7 +224,7 @@ public class AccessoryFactory implements EntityFactory {
 
     @Spawns("GhostCar")
     public Entity newGhostCar(SpawnData data){
-        Texture car = FXGL.texture("accessory/car.png", 35, 56);
+        Texture car = FXGL.texture("accessory/car.png");
         Entity e =  FXGL.entityBuilder()
                 .type(GameType.Car)
                 .viewWithBBox(car)

@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d2fabd3c-334a-4a79-8991-fd6adc91ab9b" name="Changes" comment="优化代码逻辑">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/GameApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/GameApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/app/BottomCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/app/BottomCtrl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/app/CarCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/app/CarCtrl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/app/GameLevelCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/app/GameLevelCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/app/MyPathTransition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/app/MyPathTransition.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/net/MyServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/net/ServerReaderRunnable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/info/DesignInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/info/DesignInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,6 +118,7 @@
       <workItem from="1653913729468" duration="16139000" />
       <workItem from="1653972507122" duration="10776000" />
       <workItem from="1654002006782" duration="7941000" />
+      <workItem from="1654020885253" duration="60000" />
     </task>
     <task id="LOCAL-00001" summary="添加Main类的doc">
       <created>1653899666012</created>

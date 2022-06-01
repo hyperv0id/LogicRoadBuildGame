@@ -1,28 +1,26 @@
 package org.example.app;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
+
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
-import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+
 import org.example.GameType;
 import org.example.info.LevelInfo;
 
-import java.util.ArrayList;
-
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
+import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 
 public class BottomCtrl {
-    private static Entity bottomAccessory;
-    private static Point2D[] outPlace = new Point2D[8];
-    private static int rows_,cols_;
-    private static Point2D[][] placePoints_ = new Point2D[0][];
-    private static GameType[][] types = new GameType[0][];
-    private static double[][] angles = new double[0][];
-    private static boolean[][] haveStar;
-    public static Point2D Starting_Point;
-    public static Point2D Ending_Point;
+    protected static Entity bottomAccessory;
+    protected static Point2D[] outPlace = new Point2D[8];
+    protected static int rows_,cols_;
+    protected static Point2D[][] placePoints_ = new Point2D[0][];
+    protected static GameType[][] types = new GameType[0][];
+    protected static double[][] angles = new double[0][];
+    protected static boolean[][] haveStar;
 
 
     /** 初始化
@@ -46,9 +44,6 @@ public class BottomCtrl {
         initGameType();
         // 初始化角度
         initAngle();
-
-        Starting_Point = getPlacePoint(info.startX(), info.startY());
-        Ending_Point = getPlacePoint(info.endX(), info.endY());
     }
 
     // ===================================
@@ -105,16 +100,12 @@ public class BottomCtrl {
      */
     public static Path getPath() {
         Path path = new Path();
-        path.setStrokeWidth(2);
-        path.setStroke(Color.web("#bc646c"));
-        path.setVisible(true);
-
-        LevelInfo info = GameLevelCtrl.getInfo();
         // 处理起点
-        Point2D start = getPlacePoint(info.startX(),info.startY());
-        path.getElements().add(new MoveTo(start.getX(), start.getY()));
-        int outPoint = (int)info.startAng()/45;
-        int[] np = getNextBroad(info.startX(),info.startY(), outPoint);
+        int[] rowCol = getRowColByType(GameType.Starting_Point);
+        Point2D startP = getPlacePoint(rowCol[0], rowCol[1]);
+        path.getElements().add(new MoveTo(startP.getX(), startP.getY()));
+        int outPoint = (int)getAngle(rowCol[0], rowCol[1])/45;
+        int[] np = getNextBroad(rowCol[0],rowCol[1], outPoint);
         GameType type = getType(np[0],np[1]);
 
         while (type!=GameType.NONE && type!=GameType.EndingPoint){
@@ -145,12 +136,6 @@ public class BottomCtrl {
         return path;
     }
 
-    public static ArrayList<MyPathTransition> getPathList(){
-        ArrayList<MyPathTransition> playList = new ArrayList<>();
-        // Path path = new Path();
-        // TODO: 2022/5/31 完善函数
-        return playList;
-    }
 
     /**
      * 得到内部曲线
@@ -336,15 +321,33 @@ public class BottomCtrl {
         BottomCtrl.haveStar[x][y] = isStar;
     }
 
-    public static Point2D getClosestRowCol(Point2D point){
+    public static int[] getClosestRowCol(Point2D point){
         double dist = 1e9;
-        Point2D ret = new Point2D(-1,-1);
+        int[] ret = new int[]{-1,-1};
         for (int i = 0; i < getRows(); i++) {
             for (int j = 0; j < getCols(); j++) {
                 double nd = point.distance(getPlacePoint(i,j));
                 if(dist>=nd){
                     dist = nd;
-                    ret = new Point2D(i,j);
+                    ret = new int[]{i,j};
+                }
+            }
+        }
+        return ret;
+    }
+
+    
+    public static int[] getClosestRowCol(Entity entity){
+        Point2D point = entity.getPosition().add(
+            new Point2D(entity.getWidth()/2, entity.getHeight()/2));
+        double dist = 1e9;
+        int[] ret = new int[]{-1,-1};
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getCols(); j++) {
+                double nd = point.distance(getPlacePoint(i,j));
+                if(dist>=nd){
+                    dist = nd;
+                    ret = new int[]{i,j};
                 }
             }
         }
@@ -365,8 +368,40 @@ public class BottomCtrl {
         return ret;
     }
 
+    
+    public static int[] getRowColByType(GameType type) {
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getCols(); j++) {
+                if(getType(i, j) == type){
+                    return new int[]{i,j};
+                }
+            }
+        }
+        return null;
+    }
+
 
     public static boolean haveStar(int x,int y){
         return haveStar[x][y];
+    }
+
+
+    // ===================================
+    // 打印
+    // ===================================
+    public static void printType(){
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getCols(); j++) {
+                System.out.print(getType(i, j)+"\t");
+            }System.out.println();
+        }
+    }
+    public static void printAngle(){
+        
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getCols(); j++) {
+                System.out.print(getAngle(i, j)+"\t");
+            }System.out.println();
+        }
     }
 }

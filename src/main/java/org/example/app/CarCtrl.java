@@ -1,65 +1,96 @@
 package org.example.app;
+import com.almasb.fxgl.animation.AnimationBuilder.TranslationAnimationBuilder;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.entity.SpawnData;
 
-import org.example.GameType;
-import org.example.components.RotateCenter;
-
+import javafx.animation.FadeTransition;
+import javafx.animation.PathTransition;
+import javafx.animation.PathTransition.OrientationType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
+import javafx.util.Duration;
 
 
 public class CarCtrl {
-
+    private static Path path;
+    private static TranslationAnimationBuilder ghostAnim;
+    private static PathTransition pt;
+    static Duration timeCost = Duration.seconds(5);
     public static void startRunCar() {
-        Path path = BottomCtrl.getPath();
-        
-        Texture carTexture = FXGL.texture("accessory/car.png");
-        Entity carEntity = FXGL
-            .entityBuilder()
-            .type(GameType.Car)
-            .viewWithBBox(carTexture)
-            .collidable()
-            .with(new RotateCenter(RotateCenter.CENTER))
-            .build();
-        BottomCtrl.setPosition(carEntity, BottomCtrl.Starting_Point);
-        // carEntity.setRotation(GameLevelCtrl.info.startAng());
-        // Entity carEntity = FXGL.getGameWorld().create("Car", new SpawnData());
-        FXGL.getGameWorld().addEntity(carEntity);
-        System.out.println(carEntity.getBoundingBoxComponent());
+        genPath();
+        genGhostAnim();
+        genPathT();
 
-        var anim = FXGL.animationBuilder()
-            .translate(carEntity)
+        ghostAnim.buildAndPlay();
+        pt.play();
+        
+        FXGL.addUINode(pt.getNode());
+        
+    }
+
+    private static void genPath(){
+
+        // 关于path
+        path = BottomCtrl.getPath();
+        path.setStrokeWidth(2);
+        path.setStroke(Color.web("#bc646c"));
+        path.setVisible(true);
+        // TODO 开发阶段显示path，演示阶段删除
+        FXGL.addUINode(path);
+    }
+
+    /**
+     * 创建幽灵车，拥有实体但不能拐弯
+     * @return
+     */
+    private static void genGhostAnim(){
+        // ====================
+        // 给幽灵实体添加动画
+        Entity ghostEntity = FXGL.getGameWorld().create("GhostCar", new SpawnData());
+        ghostAnim = FXGL.animationBuilder()
+            .duration(Duration.seconds(5))
+            .translate(ghostEntity)
             .alongPath(path);
-        anim.setOnFinished(new MyRunnable(carEntity, carTexture));
-        anim.buildAndPlay();
-        
-    //     Image image = new Image("assets/textures/accessory/car.png");
-    //     ImageView iv = new ImageView(image);            
-    // //    AnimatedPath
-    //     PathTransition pl = new PathTransition();
-    //     pl.setNode(iv);
-    //     pl.setDuration(Duration.seconds(3));
-    //     pl.setPath(path);
-    //     pl.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-    //     pl.setAutoReverse(false);
-    //     FXGL.addUINode(iv);
+        FXGL.getGameWorld().addEntity(ghostEntity);
 
+        ghostAnim.setOnFinished(new Runnable(){
 
-    //     pl.play();
-    //     // 结束动画
-    //     pl.setOnFinished(e-> {
-    //         FadeTransition ft = new FadeTransition();
-    //         ft.setDuration(Duration.seconds(1));
-    //         ft.setNode(iv);
-    //         ft.setToValue(0);
-    //         ft.play();
-    //         ft.setOnFinished(ee-> FXGL.removeUINode(iv));
-    //     });
+            @Override
+            public void run() {
+                System.out.println("幽灵跑完了");
+                FadeTransition ft = new FadeTransition();
+                ft.setDuration(Duration.seconds(1));
+                ft.setToValue(0);
+                ft.play();
+                ft.setOnFinished(e->{
+                    // TODO 演示阶段删除
+                    FXGL.removeUINode(path);
+                });
+            }
+        });
     }
 
 
-
-
-
+    private static void genPathT(){
+        Image img = new Image("assets/textures/accessory/car.png");
+        ImageView iv = new ImageView(img);
+        pt = new PathTransition();
+        pt.setDuration(timeCost);
+        pt.setNode(iv);
+        pt.setPath(path);
+        pt.setAutoReverse(false);
+        pt.setOrientation(OrientationType.ORTHOGONAL_TO_TANGENT);
+        
+        pt.setOnFinished(e-> {
+            FadeTransition ft = new FadeTransition();
+            ft.setDuration(Duration.seconds(1));
+            ft.setNode(iv);
+            ft.setToValue(0);
+            ft.play();
+            ft.setOnFinished(e1-> FXGL.removeUINode(iv));
+        });
+    }
 }

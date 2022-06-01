@@ -7,6 +7,7 @@ import com.almasb.fxgl.time.LocalTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.example.GameType;
 import org.example.components.MousePressLosePoint;
@@ -20,16 +21,24 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 public class GameLevelCtrl {
     // 所有积木，包括开始结束，方圆弯道
     private static ArrayList<Entity> accessories = new ArrayList<>();
-    private static ArrayList<Entity> obstacles = new ArrayList<>();
-    public static LevelInfo getInfo() {
-        return info;
-    }
+    protected static ArrayList<Entity> obstacles = new ArrayList<>();
 
     protected static LevelInfo info;
+    private Entity endAccessory;
+    private Entity startAccessory;
     protected GameLevelCtrl(){}
+    
+    
     public GameLevelCtrl(LevelInfo info) {
         GameLevelCtrl.info = info;
     }
+
+
+    public static LevelInfo getInfo() {
+        return info;
+    }
+    
+    
     public GameLevelCtrl(String levelInfo) {
         info = FXGL.getAssetLoader().loadJSON(levelInfo,LevelInfo.class).get();
         FXGL.set("crossNum",info.crossNum());
@@ -48,8 +57,27 @@ public class GameLevelCtrl {
         initButton();
         initObstacle();
         initStar();
+        initUI();
     }
 
+    /**
+     * 将UI组件放到关卡中，而不是app中
+     */
+    private void initUI() {
+        // 显示组件的剩余数量
+        Text crossText = FXGL.getUIFactoryService().newText(FXGL.getip("crossNum").asString("x%d"));
+        Text hyperbolaText = FXGL.getUIFactoryService().newText(FXGL.getip("hyperbolaNum").asString("x%d"));
+        Text arcText = FXGL.getUIFactoryService().newText(FXGL.getip("arcNum").asString("x%d"));// x:890,y:580
+        crossText.setLayoutX(890);
+        crossText.setLayoutY(280);
+        FXGL.addUINode(crossText);
+        hyperbolaText.setLayoutX(890);
+        hyperbolaText.setLayoutY(440);
+        FXGL.addUINode(hyperbolaText);
+        arcText.setLayoutX(890);
+        arcText.setLayoutY(580);
+        FXGL.addUINode(arcText);
+    }
     // 基本可放置方块
     public void initAccessories() {
         // double w=FXGL.getAppWidth();
@@ -75,6 +103,8 @@ public class GameLevelCtrl {
 
         for (Entity e : accessories) {
             e.setProperty("originPlace", e.getPosition());
+            e.setProperty("row", -1);
+            e.setProperty("col", -1);
             e.setProperty("lastPos","out");
             e.addComponent(new MousePressLosePoint());
             FXGL.getGameWorld().addEntity(e);
@@ -105,9 +135,10 @@ public class GameLevelCtrl {
         }
     }
 
-    //随机在棋盘内产生星星
-    static int[][] starPos = new int[2][2];//记录星星的位置
-    protected void initStar() {
+    /**
+     * 随机在棋盘内产生星星
+     */
+     protected void initStar() {
         Random rand = new Random();
         // int j = 0;
         for (int i = 0; i < info.starNum(); i++) {
@@ -119,14 +150,11 @@ public class GameLevelCtrl {
                 if ((x == 0 && y == 0)
                         ||(x == 3 && y == 3)
                         ||(BottomCtrl.getType(x, y)==GameType.Obstacle)
-                        ||(x == starPos[0][0] && x == starPos[0][1])
                         ||(BottomCtrl.haveStar(x,y)))
                         continue;
                 BottomCtrl.setPosition(star,x, y);
                 BottomCtrl.setStar(x,y, true);
                 FXGL.getGameWorld().addEntity(star);
-                starPos[i][0] = x;
-                starPos[i][1] = y;
                 break;
             }
         }
@@ -135,7 +163,7 @@ public class GameLevelCtrl {
     // 开始方块
     public void initStart() {
         // 创建起点
-        Entity startAccessory = getGameWorld().create("StartAccessory",new SpawnData());
+        startAccessory = getGameWorld().create("StartAccessory",new SpawnData());
         // 设置起始点位置，方向
         Point2D startPlace = BottomCtrl.getPlacePoint(info.startX(),info.startY());
         startAccessory.setPosition( startPlace.subtract(startAccessory.getWidth()/2,startAccessory.getHeight()/2) );
@@ -148,7 +176,7 @@ public class GameLevelCtrl {
     // 结束方块
     protected void initEnd() {
         // 创建终点
-        Entity endAccessory = getGameWorld().create("EndAccessory",new SpawnData());
+        endAccessory = getGameWorld().create("EndAccessory",new SpawnData());
         // 设置终点位置
         Point2D endPlace = BottomCtrl.getPlacePoint(info.endX(), info.endY());
         endAccessory.setPosition( endPlace.subtract(endAccessory.getWidth()/2,endAccessory.getHeight()/2) );
@@ -178,5 +206,15 @@ public class GameLevelCtrl {
 
     public static ArrayList<Entity> getObstacles() {
         return obstacles;
+    }
+
+
+    public Entity getEndAccessory() {
+        return endAccessory;
+    }
+
+
+    public Entity getStartAccessory() {
+        return startAccessory;
     }
 }

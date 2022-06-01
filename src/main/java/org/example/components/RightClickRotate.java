@@ -2,8 +2,10 @@ package org.example.components;
 
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.ViewComponent;
+
+import org.example.app.EntityCtrl;
+
 import javafx.scene.input.MouseButton;
-import org.example.app.BottomCtrl;
 
 
 public class RightClickRotate extends Component {
@@ -22,10 +24,7 @@ public class RightClickRotate extends Component {
         vc.addOnClickHandler(event ->{
             if(event.getButton() == MouseButton.SECONDARY){
                 entity.setRotation(entity.getRotation()+45);
-                int row=entity.getInt("row"),col=entity.getInt("col");
-                // 删除非法输入
-                if (row<0 || col<0)return;
-                BottomCtrl.setRotation(row,col,entity.getRotation());
+                EntityCtrl.updateRotate(entity);
             }
         });
     }
