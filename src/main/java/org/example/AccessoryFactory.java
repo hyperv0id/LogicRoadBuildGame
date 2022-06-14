@@ -11,8 +11,10 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.texture.Texture;
 
-import org.example.components.MyCloseToPlacePoints;
-import org.example.components.MyDraggable;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import org.example.components.CloseToPlacePoints;
+import org.example.components.DraggableEx;
 import org.example.components.ReplaceAfterRelease;
 import org.example.components.RightClickRotate;
 import org.example.components.RotateCenter;
@@ -50,7 +52,7 @@ public class AccessoryFactory implements EntityFactory {
         textureRD.setTranslateY(height);
 
         return FXGL.entityBuilder()
-                .type(GameType.BasicRoadBuilder_4)
+                .type(GameType.BasicRoadBuilder)
                 .view(textureLU)
                 .view(textureLD)
                 .view(textureRU)
@@ -62,8 +64,8 @@ public class AccessoryFactory implements EntityFactory {
     /**
      * 十字形组件，可拖动旋转
      */
-    @Spawns("CrossAccessory")
-    public Entity newCrossAccessory(SpawnData data){
+    @Spawns("Cross")
+    public Entity newCross(SpawnData data){
         Texture crossAccessories = FXGL.texture(
                 "accessory/cross2.png",
                 bottomSize/4,
@@ -77,8 +79,8 @@ public class AccessoryFactory implements EntityFactory {
 //                .bbox(BoundingShape.box(75,75))
                 .with(new RotateCenter(RotateCenter.CENTER))
                 .with(new RightClickRotate(45))
-                .with(new MyDraggable())
-                .with(new MyCloseToPlacePoints())
+                .with(new DraggableEx())
+                .with(new CloseToPlacePoints())
                 .with(new ReplaceAfterRelease())
                 .build();
     }
@@ -86,7 +88,7 @@ public class AccessoryFactory implements EntityFactory {
     /**
      * 曲面方形组件，可拖拽旋转
      */
-    @Spawns("CurveSquareAccessory")
+    @Spawns("Hyperbola")
     public Entity newCurveSquare(SpawnData data) {
         Texture curveSquare = FXGL.texture("accessory/hyperbola.png",
                 bottomSize/4, bottomSize/4);
@@ -97,8 +99,8 @@ public class AccessoryFactory implements EntityFactory {
                 .viewWithBBox(curveSquare)
                 .with(new RotateCenter(RotateCenter.CENTER))
                 .with(new RightClickRotate(45))
-                .with(new MyDraggable())
-                .with(new MyCloseToPlacePoints())
+                .with(new DraggableEx())
+                .with(new CloseToPlacePoints())
                 .with(new ReplaceAfterRelease())
                 .build();
     }
@@ -106,7 +108,7 @@ public class AccessoryFactory implements EntityFactory {
     /**
      * 香蕉形组件，可拖拽旋转
      */
-    @Spawns("CurvedOrbitAccessory")
+    @Spawns("Arc")
     public Entity newCurvedOrbit(SpawnData data) {
         // 最恶心的玩意儿
         Texture arcTexture = FXGL.texture("accessory/arc.png");
@@ -116,8 +118,8 @@ public class AccessoryFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(GameType.Arc)
                 .viewWithBBox(arcTexture)
-                .with(new MyDraggable())
-                .with(new MyCloseToPlacePoints())
+                .with(new DraggableEx())
+                .with(new CloseToPlacePoints())
                 .with(new RightClickRotate(45))
                 .with(new ReplaceAfterRelease())
                 .build();
@@ -127,13 +129,13 @@ public class AccessoryFactory implements EntityFactory {
     /**
      * 开始方块
      */
-    @Spawns("StartAccessory")
-    public Entity newStartAccessory(SpawnData data) {
-        Texture startAccessory = FXGL.texture("accessory/starting_point.png",
+    @Spawns("StartingPoint")
+    public Entity newStartingPoint(SpawnData data) {
+        Texture StartingPoint = FXGL.texture("accessory/starting_point.png",
                 bottomSize/4, bottomSize/4);
         return   FXGL.entityBuilder()
-                .type(GameType.Starting_Point)
-                .view(startAccessory)
+                .type(GameType.StartingPoint)
+                .view(StartingPoint)
                 .bbox(BoundingShape.box(bottomSize/4, bottomSize/4))
                 .with(new RotateCenter(RotateCenter.CENTER))
                 .build();
@@ -155,24 +157,13 @@ public class AccessoryFactory implements EntityFactory {
     /**
      * 结束方块
      */
-    @Spawns("EndAccessory")
-    public Entity newEndAccessory(SpawnData data) {
-        Texture endAccessory = FXGL.texture("accessory/ending_point.png",
+    @Spawns("EndingPoint")
+    public Entity newEndingPoint(SpawnData data) {
+        Texture EndingPoint = FXGL.texture("accessory/ending_point.png",
                 bottomSize/4, bottomSize/4);
         return   FXGL.entityBuilder()
                 .type(GameType.EndingPoint)
-                .viewWithBBox(endAccessory)
-                .build();
-    }
-
-
-    @Spawns("BallInCar")
-    public Entity newBallInCar(SpawnData data) {
-        Texture ballInCar = FXGL.texture("accessory/small_ball.png", 10,10);
-        return FXGL.entityBuilder()
-                .type(GameType.Small_Ball)
-                .viewWithBBox(ballInCar)
-                .with(new RotateCenter(RotateCenter.CENTER))
+                .viewWithBBox(EndingPoint)
                 .build();
     }
 
@@ -209,30 +200,28 @@ public class AccessoryFactory implements EntityFactory {
 
     @Spawns("Obstacle")
     public Entity newObstacle(SpawnData data) {
-        Texture obstacle = FXGL.texture("accessory/boom.png");
-//        obstacle.setScaleX(1/9.0);
-//        obstacle.setScaleY(1/9.0);
-        Entity e =  FXGL.entityBuilder()
+        Rectangle obstacle = new Rectangle(90,90);
+        Rectangle obstacle2 = new Rectangle(90,90);
+        obstacle2.setRotate(45);
+        obstacle.setFill(Color.BLACK);
+        return FXGL.entityBuilder()
                 .type(GameType.Obstacle)
                 .collidable()
                 .view(obstacle)
-                .bbox(BoundingShape.box(10,10))
+                .view(obstacle2)
+                .bbox(BoundingShape.box(83,83))
                 .build();
-//        e.setScaleOrigin(new Point2D(e.getWidth()/3,e.getHeight()/3));
-        e.setScaleX(0.5);
-        e.setScaleY(0.5);
-        return  e;
     }
 
-    @Spawns("StarAccessory")
-    public Entity newStarAccessory (SpawnData data){
-        Texture StarAccessory= FXGL.texture(
+    @Spawns("Star")
+    public Entity newStar (SpawnData data){
+        Texture Star= FXGL.texture(
                 "accessory/Star.png",
                 50,
                 50);
         return   FXGL.entityBuilder()
                 .type(GameType.Star)
-                .viewWithBBox(StarAccessory)
+                .viewWithBBox(Star)
                 .collidable()
                 //.bbox(BoundingShape.box(30,30))//目前应该没什么用
                 .build();
@@ -251,13 +240,14 @@ public class AccessoryFactory implements EntityFactory {
         e.setOpacity(0);
         return e;
     }
-    //星星探测器，用来检测星星的位置，只有大小没有图像
-    @Spawns("StarDetector")
-    public Entity newStarDetector (SpawnData data) {
-        return FXGL.entityBuilder()
-        .type(GameType.StarDetector)
-        .bbox(BoundingShape.box(60,60))
-        .collidable()
-        .build();
-    }
+
+//     //星星探测器，用来检测星星的位置，只有大小没有图像
+//     @Spawns("StarDetector")
+//     public Entity newStarDetector (SpawnData data) {
+//         return FXGL.entityBuilder()
+//         .type(GameType.StarDetector)
+//         .bbox(BoundingShape.box(60,60))
+//         .collidable()
+//         .build();
+//     }
 }

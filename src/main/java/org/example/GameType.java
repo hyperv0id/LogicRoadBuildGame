@@ -1,20 +1,21 @@
 package org.example;
 
 public enum GameType {
-    BasicRoadBuilder_4,
-    BasicRoadBuilder_6,
+    NONE, 
+    BasicRoadBuilder,
+    // BasicRoadBuilder_6,
     Cross,
     Hyperbola,
     Arc,
-    Starting_Point,
+    StartingPoint,
     EndingPoint,
-    Small_Ball,
+    // Small_Ball,
     Car,
     StartRunCarButton,
     Obstacle,
     BOX,
     Star,
-    NONE, 
     RestartLevelButton,
-    GhostCar, ReplaceButton, StarDetector
+    GhostCar, ReplaceButton, 
+    // StarDetector
 }

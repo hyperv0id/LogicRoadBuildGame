@@ -4,6 +4,11 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 
 import java.util.Map;
 
+import org.example.app.DesignModeCtrl;
+import org.example.app.GameLevelCtrl;
+import org.example.ui.MainMenu;
+import org.example.ui.MyLoadingScene;
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
@@ -13,10 +18,6 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 
-import org.example.app.GameLevelCtrl;
-import org.example.ui.MainMenu;
-import org.example.ui.MyLoadingScene;
-
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -24,7 +25,8 @@ import javafx.scene.text.Text;
  * Main 类，继承自 GameApplication
  */
 public class RoadBuilderApp extends GameApplication {
-    public static int chosenLevel = 3;
+    public static int chosenLevel = 4;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -58,12 +60,12 @@ public class RoadBuilderApp extends GameApplication {
          * 基本游戏设置
          */
         gameSettings.setTitle("Logic Road Game");
-        gameSettings.setVersion("0.1");
+        gameSettings.setVersion("1.4");
         gameSettings.setWidth(960);
         gameSettings.setHeight(640);
         gameSettings.setAppIcon("ui/icon.png");
 
-        
+
         gameSettings.setMainMenuEnabled(true);
         gameSettings.setSceneFactory(new SceneFactory() {
             public LoadingScene newLoadingScene() {
@@ -85,17 +87,22 @@ public class RoadBuilderApp extends GameApplication {
 
 
         // TODO: 2022/5/31 在添加UI后一个根据选择的游戏模式的不同执行不同函数
-
-        GameLevelCtrl gameLevelCtrl = new GameLevelCtrl("data/levels/levelInfo" + chosenLevel + ".json");
-        gameLevelCtrl.init();
-
-        // BottomCtrl.printType();
-
-        // for (Entity e  : FXGL.getGameWorld().getEntities()) {
-        //     e.getViewComponent().addOnClickHandler(eve->{
+        if (chosenLevel == 1 || chosenLevel == 2 || chosenLevel == 3) {
+            GameLevelCtrl gameLevelCtrl = new GameLevelCtrl("data/levels/levelInfo" + chosenLevel + ".json");
+            gameLevelCtrl.init();
+        } else if (chosenLevel == 4) {
+            DesignModeCtrl designModeCtrl = new DesignModeCtrl("data/levels/DesignInfo.json");
+            designModeCtrl.init();
+        }
+        else {
+            return;
+        }
+        // for (Entity entity : FXGL.getGameWorld().getEntities()) {
+        //     entity.getViewComponent().addOnClickHandler(e->{
         //         BottomCtrl.printType();
         //     });
         // }
+
     }
 
     @Override
@@ -103,7 +110,9 @@ public class RoadBuilderApp extends GameApplication {
         vars.put("crossNum",0);
         vars.put("hyperbolaNum",0);
         vars.put("arcNum",0);
-        vars.put("gameIsOver", 0);
+        vars.put("stepCount",0);
+        vars.put("points",0);
+        vars.put("starCount",0);
     }
 
     @Override
@@ -119,7 +128,8 @@ public class RoadBuilderApp extends GameApplication {
                 new CollisionHandler(GameType.Car, GameType.Star) {
                     @Override
                     protected void onCollisionBegin(Entity car, Entity star) {
-                        System.out.println("collision to star");
+                        FXGL.play("star.wav");
+                        FXGL.inc("starCount",1);
                         star.removeFromWorld();
                     }
                 });
@@ -128,16 +138,10 @@ public class RoadBuilderApp extends GameApplication {
     @Override
     protected void onPreInit() {
         // 预加载资源，如设置游戏初始化音量
-        FXGL.getSettings().setGlobalMusicVolume(0.1);
-        FXGL.getSettings().setGlobalSoundVolume(0.1);
+        FXGL.getSettings().setGlobalMusicVolume(10);
+        FXGL.getSettings().setGlobalSoundVolume(10);
 
-        // FXGL.loopBGM("Never Give Up - StayLoose [Arknights Soundtrack] Music Video
-        // (320 kbps).mp3");
+        FXGL.loopBGM("Sound Studio B - あなたのためにさりげなく.mp3");
     }
 
-    //选择关卡加载数据
-    public static void chooseLevel(int level) {
-        FXGL.set("level",level);
-        System.out.println(FXGL.geti("level"));
-    }
 }

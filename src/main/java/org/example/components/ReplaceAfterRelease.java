@@ -16,13 +16,12 @@ public class ReplaceAfterRelease extends Component {
         if (e.getButton() == MouseButton.SECONDARY)
             return;
         // 超出棋盘就放回原处
-        if (entity.isColliding(BottomCtrl.getEntity())){
-            return;
-        }
-        GameType type = (GameType)entity.getType();
-        switch(type){
-            case Arc, Hyperbola,Cross->EntityCtrl.backToCardSlot(entity);
-            default -> EntityCtrl.backToLastPlace(entity, type);
+        if (!entity.isColliding(BottomCtrl.getEntity())){
+            GameType type = (GameType)entity.getType();
+            switch(type){
+                case Arc, Hyperbola,Cross->EntityCtrl.backToCardSlot(entity);
+                default -> EntityCtrl.backToLastPlace(entity, type);
+            }
         }
     };
 

@@ -8,8 +8,8 @@ import com.almasb.fxgl.entity.SpawnData;
 
 import org.example.GameType;
 import org.example.components.MousePressLosePoint;
-import org.example.components.MyCloseToPlacePoints;
-import org.example.components.MyDraggable;
+import org.example.components.CloseToPlacePoints;
+import org.example.components.DraggableEx;
 import org.example.components.RightClickRotate;
 import org.example.components.RotateCenter;
 import org.example.info.LevelInfo;
@@ -48,8 +48,8 @@ public class DesignModeCtrl extends GameLevelCtrl{
     public void initObstacle(){
         super.initObstacle();
         for (Entity entity : obstacles) {
-            entity.addComponent(new MyDraggable());
-            entity.addComponent(new MyCloseToPlacePoints());
+            entity.addComponent(new DraggableEx());
+            entity.addComponent(new CloseToPlacePoints());
             entity.addComponent(new MousePressLosePoint());
         }
     }
@@ -58,11 +58,11 @@ public class DesignModeCtrl extends GameLevelCtrl{
     public void initStart() {
         int x = info.startX(),y = info.startY();
         // 创建起点
-        Entity startE = getGameWorld().create("StartAccessory",new SpawnData());
-        startE.addComponent(new MyDraggable());
+        Entity startE = getGameWorld().create("StartingPoint",new SpawnData());
+        startE.addComponent(new DraggableEx());
         startE.addComponent(new RotateCenter(RotateCenter.CENTER));
         startE.addComponent(new RightClickRotate(45));
-        startE.addComponent(new MyCloseToPlacePoints());
+        startE.addComponent(new CloseToPlacePoints());
         startE.addComponent(new MousePressLosePoint());
         // 设置起始点位置，方向
         Point2D startPlace = BottomCtrl.getPlacePoint(x,y);
@@ -71,6 +71,7 @@ public class DesignModeCtrl extends GameLevelCtrl{
         // 设置行列参数，便于调用
         startE.setProperty("row", x);
         startE.setProperty("col", y);
+        startE.setProperty("lastPos", "in");
 
         // 不能传形参，不然无法覆盖
         BottomCtrl.setType(x, y,(GameType) startE.getType());
@@ -84,17 +85,18 @@ public class DesignModeCtrl extends GameLevelCtrl{
     protected void initEnd() {
         int x = info.endX(), y = info.endY();
         // 创建终点
-        Entity endE = getGameWorld().create("EndAccessory",new SpawnData());
-        endE.addComponent(new MyDraggable());
+        Entity endE = getGameWorld().create("EndingPoint",new SpawnData());
+        endE.addComponent(new DraggableEx());
         endE.addComponent(new RotateCenter(RotateCenter.CENTER));
         endE.addComponent(new RightClickRotate(45));
-        endE.addComponent(new MyCloseToPlacePoints());
+        endE.addComponent(new CloseToPlacePoints());
         endE.addComponent(new MousePressLosePoint());
-        
+
         // 设置行列参数，便于调用
         endE.setProperty("row", x);
         endE.setProperty("col", y);
-        
+        endE.setProperty("lastPos", "in");
+
         // 设置终点位置
         Point2D endPlace = BottomCtrl.getPlacePoint(x, y);
         endE.setPosition( endPlace.subtract(endE.getWidth()/2,endE.getHeight()/2) );

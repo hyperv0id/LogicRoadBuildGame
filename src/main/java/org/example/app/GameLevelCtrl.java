@@ -25,11 +25,11 @@ public class GameLevelCtrl {
     protected static ArrayList<Entity> stars = new ArrayList<>();
 
     protected static LevelInfo info;
-    private static Entity endAccessory;
-    private static Entity startAccessory;
+    private static Entity EndingPoint;
+    private static Entity StartingPoint;
     protected GameLevelCtrl(){}
-    
-    
+
+
     public GameLevelCtrl(LevelInfo info) {
         GameLevelCtrl.info = info;
     }
@@ -38,8 +38,8 @@ public class GameLevelCtrl {
     public static LevelInfo getInfo() {
         return info;
     }
-    
-    
+
+
     public GameLevelCtrl(String levelInfo) {
         info = FXGL.getAssetLoader().loadJSON(levelInfo,LevelInfo.class).get();
         FXGL.set("crossNum",info.crossNum());
@@ -56,8 +56,7 @@ public class GameLevelCtrl {
         initAccessories();
         // 初始化按钮
         initButton();
-        
-        initReplace();
+        // todo 取消注释
         initObstacle();
         initStar();
         initUI();
@@ -87,19 +86,19 @@ public class GameLevelCtrl {
         double h=FXGL.getAppHeight();
         // 创建多个十字形组件
         for (int i = 0; i < info.crossNum(); i++) {
-            Entity cross = getGameWorld().create("CrossAccessory",new SpawnData());
+            Entity cross = getGameWorld().create("Cross",new SpawnData());
             cross.setPosition(740,h/4);
             accessories.add(cross);
         }
         // 创建多个曲面方形组件
         for (int i = 0; i < info.curveSquareNum(); i++) {
-            Entity hyperbola = getGameWorld().create("CurveSquareAccessory",new SpawnData());
+            Entity hyperbola = getGameWorld().create("Hyperbola",new SpawnData());
             hyperbola.setPosition(740,h/2);
             accessories.add(hyperbola);
         }
         //创建多个香蕉形组件
         for (int i = 0; i < info.curveOrbitNum(); i++) {
-            Entity arc = getGameWorld().create("CurvedOrbitAccessory",new SpawnData());
+            Entity arc = getGameWorld().create("Arc",new SpawnData());
             arc.setPosition(740,2*h/3);
             accessories.add(arc);
         }
@@ -126,13 +125,14 @@ public class GameLevelCtrl {
                 if (!((x == 0 && y == 0)
                         ||(x == 3 && y == 3)
                         ||(x == 1 && y == 1))) {
-                            BottomCtrl.setPosition(obstacle, x, y);
-                            obstacle.setProperty("row", x);
-                            obstacle.setProperty("col", y);
-                            BottomCtrl.setType(x, y, (GameType)obstacle.getType());
-                            FXGL.getGameWorld().addEntity(obstacle);
-                            obstacles.add(obstacle);
-                        break;
+                    BottomCtrl.setPosition(obstacle, x, y);
+                    obstacle.setProperty("row", x);
+                    obstacle.setProperty("col", y);
+                    obstacle.setProperty("lastPos", "in");
+                    BottomCtrl.setType(x, y, (GameType)obstacle.getType());
+                    FXGL.getGameWorld().addEntity(obstacle);
+                    obstacles.add(obstacle);
+                    break;
                 }
             }
         }
@@ -141,11 +141,11 @@ public class GameLevelCtrl {
     /**
      * 随机在棋盘内产生星星
      */
-     protected void initStar() {
+    protected void initStar() {
         Random rand = new Random();
         // int j = 0;
         for (int i = 0; i < info.starNum(); i++) {
-            Entity star = getGameWorld().create("StarAccessory", new SpawnData());
+            Entity star = getGameWorld().create("Star", new SpawnData());
 
             while (true) {
                 int x = rand.nextInt(4);
@@ -154,7 +154,7 @@ public class GameLevelCtrl {
                         ||(x == 3 && y == 3)
                         ||(BottomCtrl.getType(x, y)==GameType.Obstacle)
                         ||(BottomCtrl.haveStar(x,y)))
-                        continue;
+                    continue;
                 BottomCtrl.setPosition(star,x, y);
                 BottomCtrl.setStar(x,y, true);
                 FXGL.getGameWorld().addEntity(star);
@@ -167,31 +167,32 @@ public class GameLevelCtrl {
     // 开始方块
     public void initStart() {
         // 创建起点
-        startAccessory = getGameWorld().create("StartAccessory",new SpawnData());
+        StartingPoint = getGameWorld().create("StartingPoint",new SpawnData());
         // 设置起始点位置，方向
         Point2D startPlace = BottomCtrl.getPlacePoint(info.startX(),info.startY());
-        startAccessory.setPosition( startPlace.subtract(startAccessory.getWidth()/2,startAccessory.getHeight()/2) );
-        startAccessory.setRotation(info.startAng());
+        StartingPoint.setPosition( startPlace.subtract(StartingPoint.getWidth()/2,StartingPoint.getHeight()/2) );
+        StartingPoint.setRotation(info.startAng());
         // 不能传形参，不然无法覆盖
-        BottomCtrl.setType(info.startX(), info.startY(),(GameType) startAccessory.getType());
-        BottomCtrl.setRotation(info.startX(), info.startY(),startAccessory.getRotation());
-        FXGL.getGameWorld().addEntity(startAccessory);
+        BottomCtrl.setType(info.startX(), info.startY(),(GameType) StartingPoint.getType());
+        BottomCtrl.setRotation(info.startX(), info.startY(),StartingPoint.getRotation());
+        FXGL.getGameWorld().addEntity(StartingPoint);
     }
     // 结束方块
     protected void initEnd() {
         // 创建终点
-        endAccessory = getGameWorld().create("EndAccessory",new SpawnData());
+        EndingPoint = getGameWorld().create("EndingPoint",new SpawnData());
         // 设置终点位置
         Point2D endPlace = BottomCtrl.getPlacePoint(info.endX(), info.endY());
-        endAccessory.setPosition( endPlace.subtract(endAccessory.getWidth()/2,endAccessory.getHeight()/2) );
-        BottomCtrl.setType( info.endX(), info.endY() ,(GameType) endAccessory.getType());
-        FXGL.getGameWorld().addEntity(endAccessory);
+        EndingPoint.setPosition( endPlace.subtract(EndingPoint.getWidth()/2,EndingPoint.getHeight()/2) );
+        BottomCtrl.setType( info.endX(), info.endY() ,(GameType) EndingPoint.getType());
+        FXGL.getGameWorld().addEntity(EndingPoint);
     }
 
 
     // 按钮
     protected void initButton() {
         initStartRunBtn();
+        initReplace();
     }
 
     private void initStartRunBtn() {
@@ -218,9 +219,14 @@ public class GameLevelCtrl {
             for(Entity entity2:accessories){
                 GameType type = (GameType)entity2.getType();
                 switch (type) {
-                    case Arc,Cross,Hyperbola->
-                EntityCtrl.backToCardSlot(entity2);
-                default ->{}
+                    // TODO 0602-10:49 修改
+                    // 已经在原位的不作动画
+                    case Arc,Cross,Hyperbola->{
+                        if(entity2.getPosition().distance((Point2D)entity2.getProperties().getObject("originPlace")) > 1 ){
+                            EntityCtrl.backToCardSlot(entity2);
+                        }
+                    }
+                    default ->{}
                 }
             }
         };
@@ -233,12 +239,12 @@ public class GameLevelCtrl {
     }
 
 
-    public Entity getEndAccessory() {
-        return endAccessory;
+    public Entity getEndingPoint() {
+        return EndingPoint;
     }
 
 
-    public Entity getStartAccessory() {
-        return startAccessory;
+    public Entity getStartingPoint() {
+        return StartingPoint;
     }
 }

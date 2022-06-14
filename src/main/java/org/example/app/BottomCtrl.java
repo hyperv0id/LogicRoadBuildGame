@@ -2,18 +2,21 @@ package org.example.app;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 
+import org.example.GameType;
+import org.example.info.LevelInfo;
+
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 
-import org.example.GameType;
-import org.example.info.LevelInfo;
-
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.QuadCurveTo;
 
-public class BottomCtrl {
+public class  BottomCtrl {
     protected static Entity bottomAccessory;
     protected static Point2D[] outPlace = new Point2D[8];
     protected static int rows_,cols_;
@@ -101,7 +104,7 @@ public class BottomCtrl {
     public static Path getPath() {
         Path path = new Path();
         // 处理起点
-        int[] rowCol = getRowColByType(GameType.Starting_Point);
+        int[] rowCol = getRowColByType(GameType.StartingPoint);
         Point2D startP = getPlacePoint(rowCol[0], rowCol[1]);
         path.getElements().add(new MoveTo(startP.getX(), startP.getY()));
         int outPoint = (int)getAngle(rowCol[0], rowCol[1])/45;
@@ -112,6 +115,7 @@ public class BottomCtrl {
             int inPoint = (outPoint+4)%8;// 入射角
             Point2D inPlace = getOffset(inPoint).add(getPlacePoint(np[0],np[1]));// 入射点
             path.getElements().add(new LineTo(inPlace.getX(), inPlace.getY()));// 直线连接两个板块
+            FXGL.inc("stepCount",1);
 
             // 先得到出射点
             outPoint = getOutPoint(np[0],np[1],inPoint);
@@ -133,6 +137,10 @@ public class BottomCtrl {
             Point2D endPlace = getPlacePoint(np[0],np[1]);
             path.getElements().add(new LineTo(endPlace.getX(),endPlace.getY()));
         }
+        else {
+            FXGL.set("stepCount", 16);
+        }
+        //System.out.println("steps:" + FXGL.geti("stepCount"));//测试用，可删
         return path;
     }
 
@@ -178,16 +186,7 @@ public class BottomCtrl {
         Point2D entitySize = new Point2D(entity.getWidth()/2,entity.getHeight()/2);
         entity.setPosition(p2d.subtract(entitySize));
     }
-    /**
-     * 将组件放置到棋盘上的对应位置
-     * @param entity 组件对象
-     * @param x 放到第几行
-     * @param y 放到第几列
-     */
-    public static void setPosition(Entity entity, Point2D p2d){
-        Point2D entitySize = new Point2D(entity.getWidth()/2,entity.getHeight()/2);
-        entity.setPosition(p2d.subtract(entitySize));
-    }
+
     /**
      * 生成放置点
      */
@@ -197,7 +196,6 @@ public class BottomCtrl {
         // 得到底板中心点
         Point2D center = new Point2D(bottomAccessory.getWidth()/2, bottomAccessory.getHeight()/2)
                 .add(bottomAccessory.getPosition()).add(-2,-2);
-        FXGL.entityBuilder().view(new Rectangle(5,5, Color.YELLOW)).at(center).buildAndAttach();
         double width = bottomAccessory.getWidth()/rows,
                 height = bottomAccessory.getHeight()/cols;
         width*=0.95;
@@ -338,10 +336,10 @@ public class BottomCtrl {
         return ret;
     }
 
-    
+
     public static int[] getClosestRowCol(Entity entity){
         Point2D point = entity.getPosition().add(
-            new Point2D(entity.getWidth()/2, entity.getHeight()/2));
+                new Point2D(entity.getWidth()/2, entity.getHeight()/2));
         double dist = 1e9;
         int[] ret = new int[]{-1,-1};
         for (int i = 0; i < getRows(); i++) {
@@ -370,7 +368,7 @@ public class BottomCtrl {
         return ret;
     }
 
-    
+
     public static int[] getRowColByType(GameType type) {
         for (int i = 0; i < getRows(); i++) {
             for (int j = 0; j < getCols(); j++) {
@@ -399,7 +397,7 @@ public class BottomCtrl {
         }
     }
     public static void printAngle(){
-        
+
         for (int i = 0; i < getRows(); i++) {
             for (int j = 0; j < getCols(); j++) {
                 System.out.print(getAngle(i, j)+"\t");

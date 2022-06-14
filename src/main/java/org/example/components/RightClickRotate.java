@@ -1,5 +1,6 @@
 package org.example.components;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.ViewComponent;
 
@@ -25,6 +26,7 @@ public class RightClickRotate extends Component {
             if(event.getButton() == MouseButton.SECONDARY){
                 entity.setRotation(entity.getRotation()+45);
                 EntityCtrl.updateRotate(entity);
+                FXGL.play("rotate.wav");
             }
         });
     }
